@@ -1,42 +1,54 @@
-import cfg
 import asyncio
 
-from aiogram import Dispatcher, Bot, types
-from aiogram.filters import Command, ChatMemberUpdatedFilter, PROMOTED_TRANSITION
+from aiogram import Dispatcher, Bot, types, F
+from aiogram.filters import Command
+
+import cfg, handlers, database
+import handlers.change_lang
+import handlers.create_promo
 
 
 dp = Dispatcher()
-
-
-@dp.my_chat_member(ChatMemberUpdatedFilter(PROMOTED_TRANSITION))
-async def statuses(update: types.ChatMemberUpdated, bot: Bot):
-    await asyncio.sleep(1)
-
-    link = (await bot.get_chat(update.chat.id)).invite_link
-    await bot.send_message(
-        update.from_user.id, 
-        f"joined to <a href='{link}'>{update.chat.title}</a>",parse_mode="html"
-    )
-    #TODO save channel id
-    await bot.send_message(update.chat.id, "im admin")
     
 
-# @dp.message()
-# async def getId(message: types.Message, bot: Bot):
-#     link = await bot.create_chat_invite_link(cfg.CHANNEL_ID, f"Invitation for {message.from_user.full_name}", member_limit=1)
-#     await message.answer(link.invite_link)
+@dp.message(Command("start"))
+async def startcmd(message: types.Message):
+    await message.answer(
+        text="Hi, welcome to our bot!", 
+        reply_markup=types.reply_keyboard_remove.ReplyKeyboardRemove()
+    )
+    if not message.from_user.id in database.dbrequests.userslang:
+        usr = [message.from_user.id, str(None),
+               message.from_user.full_name, str(message.from_user.username)]
+        database.dbrequests.create_user_db(*usr)
+        await handlers.change_lang.set_lang(message)
 
 
 async def main() -> None:
     bot = Bot(token=cfg.BOT_TOKEN)
+    dp.include_routers(
+        handlers.change_lang.router, 
+        handlers.create_promo.router
+    )
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot, handle_signals=True)
 
 
 @dp.startup()
-async def start(bot: Bot):
+async def start_bot(bot: Bot):
+    database.dbrequests.setup_tables_db()
+    database.dbrequests.userslang = database.dbrequests.load_ulangs_db()
+    print(database.dbrequests.userslang)
     print("Online")
 
 
+@dp.shutdown()
+async def stop_bot():
+    database.dbrequests.close_all_db()
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except:
+        stop_bot()
