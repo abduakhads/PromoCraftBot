@@ -9,13 +9,14 @@ promos = """CREATE TABLE IF NOT EXISTS promos (
     promo_id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     channel_id INTEGER NOT NULL,
+    mode TEXT NOT NULL,
     title TEXT NOT NULL,
-    description TEXT NOT NULL,
     winner_count INTEGER NOT NULL,
     expiration TEXT NOT NULL,
     memberlimit TEXT NOT NULL,
-    status INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (user_id)
+    status INTEGER DEFAULT 1,
+    FOREIGN KEY (user_id) REFERENCES users (user_id),
+    FOREIGN KEY (channel_id) REFERENCES channels (channel_id)
 )"""
 
 reflinks = """CREATE TABLE IF NOT EXISTS reflinks (
@@ -25,6 +26,24 @@ reflinks = """CREATE TABLE IF NOT EXISTS reflinks (
     link TEXT NOT NULL,
     revoked INTEGER NOT NULL,
     joins INTEGER NOT NULL,
+    is_sub INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (user_id),
     FOREIGN KEY (promo_id) REFERENCES promos (promo_id)
+)"""
+
+subs = """CREATE TABLE IF NOT EXISTS subs (
+    sub_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    promo_id INTEGER NOT NULL,
+    is_sub INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (user_id),
+    FOREIGN KEY (promo_id) REFERENCES promos (promo_id)
+)"""
+
+channels = """CREATE TABLE IF NOT EXISTS channels (
+    channel_id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    link TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (user_id)
 )"""

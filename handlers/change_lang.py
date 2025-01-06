@@ -1,9 +1,8 @@
-from aiogram import Router, F, Bot, types
-# from aiogram.filters import BaseFilter
+from aiogram import Router, F, types
 
-from database import dbrequests
 import lang
 import keyboards as kb
+from database import dbrequests
 
 
 router = Router()
@@ -25,5 +24,6 @@ async def set_lang_call(callback: types.CallbackQuery):
     await callback.message.delete()
     await callback.message.answer(
         text=lang.set_lang_done[dbrequests.userslang[callback.from_user.id]],
+        reply_markup=await kb.get_main_kb(dbrequests.userslang[callback.from_user.id])
     )
     await callback.answer()
