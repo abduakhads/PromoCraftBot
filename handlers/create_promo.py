@@ -3,9 +3,11 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 
 import lang
+from handlers.helpfuncs import is_valid_datetime
 import keyboards as kb
 from database import dbrequests
 from handlers.middlwares import CancellForAll
+from handlers.change_lang import set_timediff
 
 
 router = Router()
@@ -23,6 +25,10 @@ class CreatePromo(StatesGroup):
 
 @router.message(F.text.in_(lang.init_promo.values()))
 async def create_promo_0(message: types.Message, state: FSMContext):
+    if not dbrequests.get_utimdiff_db(message.from_user.id)[0][0]:
+        await message.answer("First you need to configure time zone")
+        await set_timediff(message, state)
+        return
     if dbrequests.load_uchannels_db(message.from_user.id):
         await message.answer(
             "Lets start", 
@@ -43,11 +49,11 @@ async def create_promo_0(message: types.Message, state: FSMContext):
 async def create_promo_1can(message: types.Message):
     pass
 
-@router.callback_query(CreatePromo.channel_id, F.data.startswith('forchan'))
+@router.callback_query(CreatePromo.channel_id, F.data.startswith('forchan'))#####
 async def create_promo_1(callback: types.CallbackQuery, state: FSMContext):
     await state.update_data(channel_id=callback.data.split("_")[1])
     await callback.message.edit_text(
-        f"chosen <a href='{callback.data.split('_')[3]}'>{callback.data.split('_')[2]}</a> channel",
+        f"chosen <a href='{callback.data.split('_')[2]}'>{dbrequests.get_channel_link_db(callback.data.split('_')[1])[0][1]}</a> channel",
         parse_mode="html"
     )
     await callback.message.answer(
@@ -70,6 +76,7 @@ async def create_promo_2(message: types.Message, state: FSMContext):
 @router.message(CreatePromo.mode)
 async def create_promo_3can(message: types.Message):
     pass
+
 
 @router.callback_query(CreatePromo.mode, F.data.startswith('mode'))
 async def create_promo_3(callback: types.CallbackQuery, state: FSMContext):
@@ -124,14 +131,18 @@ async def create_promo_5(message: types.Message, state: FSMContext):
         return
     await state.update_data(winner_count=message.text)
     await message.answer(
-        "Please give expire date"
+        "Please give expire date in format dd.mm.yyyy hh:mm"
     )
     await state.set_state(CreatePromo.expiration)
 
 
 @router.message(CreatePromo.expiration)
 async def create_promo_6(message: types.Message, state: FSMContext):
-    await state.update_data(expiration=message.text)
+    if not (expdt := is_valid_datetime(message.text, dbrequests.get_utimdiff_db(message.from_user.id)[0][0].split(":"))):
+        await message.answer("Please give expire date in format dd.mm.yyyy hh:mm")
+        return
+    print(expdt)
+    await state.update_data(expiration=expdt)
     await message.answer(
         "Success",
         reply_markup=await kb.get_main_kb(dbrequests.userslang[message.from_user.id])
@@ -145,9 +156,7 @@ async def create_promo_6(message: types.Message, state: FSMContext):
     #TODO PUBLISH?
 
 
-@router.message()
-async def defaults(message: types.Message):
-    await message.answer(":)")
+
 
 
     # link = await bot.create_chat_invite_link(cfg.CHANNEL_ID, f"Invitation for {update.from_user.full_name}", member_limit=1)

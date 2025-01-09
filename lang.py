@@ -36,3 +36,13 @@ my_channels = {
 my_promos = {
     "en": "My promos"
 }
+
+
+change_timediff = {
+    "en": "Time zone"
+}
+
+
+settings = {
+    "en": "Settings"
+}

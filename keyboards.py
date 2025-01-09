@@ -26,7 +26,7 @@ async def cancel_all_kb(usrlang: str) -> ReplyKeyboardMarkup:
 async def get_main_kb(usrlang: str) -> ReplyKeyboardMarkup:
     mainkb = ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text=lang.init_promo[usrlang]), KeyboardButton(text=lang.change_lang[usrlang])],
+            [KeyboardButton(text=lang.init_promo[usrlang]), KeyboardButton(text=lang.settings[usrlang])],
             [KeyboardButton(text=lang.my_promos[usrlang]), KeyboardButton(text=lang.my_channels[usrlang])]
         ],
         is_persistent = True, resize_keyboard=True
@@ -55,7 +55,7 @@ async def get_prconfmodes_inkb(prmode: str) -> InlineKeyboardMarkup:
 async def get_uchannels_inkb(uid: int) -> InlineKeyboardMarkup:
     channelskb = InlineKeyboardBuilder()
     for row in dbrequests.load_uchannels_db(uid):
-        channelskb.add(InlineKeyboardButton(text=row[1], callback_data=f"forchan_{row[0]}_{row[1]}_{row[2]}"))
+        channelskb.add(InlineKeyboardButton(text=row[1], callback_data=f"forchan_{row[0]}_{row[2]}"))
     return channelskb.adjust(1).as_markup()
 
 
@@ -64,3 +64,14 @@ async def get_upromos_inkb(uid: int) -> InlineKeyboardMarkup:
     for row in dbrequests.get_upromos_db(uid):
         promokb.add(InlineKeyboardButton(text=row[1], callback_data=f"forpromo_{row[0]}_{row[1]}"))
     return promokb.adjust(1).as_markup()
+
+
+async def get_settings_kb(usrlang: str) -> ReplyKeyboardMarkup:
+    mainkb = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text=lang.change_lang[usrlang]), KeyboardButton(text=lang.change_timediff[usrlang])],
+            [KeyboardButton(text=lang.cancel_all[usrlang])]
+        ],
+        is_persistent = True, resize_keyboard=True
+    )
+    return mainkb

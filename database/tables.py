@@ -2,7 +2,8 @@ users = """CREATE TABLE IF NOT EXISTS users (
     user_id INTEGER PRIMARY KEY,
     lang TEXT NOT NULL,
     fullname TEXT NOT NULL,
-    username TEXT NOT NULL
+    username TEXT NOT NULL,
+    timediff TEXT
 )"""
 
 promos = """CREATE TABLE IF NOT EXISTS promos (

@@ -101,7 +101,7 @@ def get_usrby_channel_db(channel_id: int):
 
 
 def get_channel_link_db(channel_id: int):
-    cur.execute("SELECT link FROM channels WHERE channel_id = ?", (channel_id,))
+    cur.execute("SELECT link, name FROM channels WHERE channel_id = ?", (channel_id,))
     return cur.fetchall()
 
 
@@ -119,3 +119,13 @@ def save_promo_db(
 def get_upromos_db(user_id: int) -> list:
     cur.execute("SELECT promo_id, title FROM promos WHERE user_id = ? AND status = 1", (user_id,))
     return cur.fetchall()
+
+
+def get_utimdiff_db(user_id: int) -> str | None:
+    cur.execute("SELECT timediff FROM users WHERE user_id = ?", (user_id,))
+    return cur.fetchall()
+
+
+@transaction
+def upd_utimediff_db(user_id: int, timediff: str):
+    cur.execute("UPDATE users SET timediff = ? WHERE user_id = ?", (timediff, user_id))
