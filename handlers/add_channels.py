@@ -42,6 +42,7 @@ async def added_channel(update: types.ChatMemberUpdated, bot: Bot):
             f"please give the admin rights mentioned in guide in channel: <a href='{link}'>{update.chat.title}</a>,\
             \n\notherwise bot can't publish results or add users to channel", parse_mode="html"
         )
+        dbrequests.remove_channel_db(update.chat.id)
     except Exception as e:
         print(e)
 
@@ -65,7 +66,7 @@ async def kicked_channel(update: types.ChatMemberUpdated, bot: Bot):
 
 class ChatFilter(BaseFilter):
     async def __call__(self, update: types.ChatMemberUpdated):
-        print(update.invite_link)
+        # print(update.invite_link)
         return True if update.invite_link else False
 
 

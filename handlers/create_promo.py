@@ -144,8 +144,10 @@ async def create_promo_6(message: types.Message, state: FSMContext):
         await message.answer("Please give expire date in format dd.mm.yyyy hh:mm")
         return
     await state.update_data(expiration=expdt)
+    data = await state.get_data()
+    text = "Please check if everything is correct\n\n" + f"Title: {data['title']}\nMode: {data['mode']} {data['confmod']}\nShould invite(for ref random mode only): {await state.get_value('memberlimit')}\nWinner count: {data['winner_count']}\nDate: {data['expiration']}" 
     await message.answer(
-        "is it corrrect?",
+        text,
         reply_markup=await kb.get_confirm_inkb(dbrequests.userslang[message.from_user.id])
     )
     await state.set_state(CreatePromo.confirm)

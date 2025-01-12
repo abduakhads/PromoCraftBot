@@ -65,7 +65,7 @@ async def ustartcmd(message: types.Message, command: CommandObject, state: FSMCo
 async def process_promos():
     tasks = dbrequests.get_ready_promos(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     for task in tasks:
-        print(task)
+        # print(task)
         if not (winnersids := dbrequests.get_players(task[0], task[7], task[5], task[3].split("_")[0])):
             continue
         if task[3].split("_")[0] == "ref":
@@ -80,20 +80,19 @@ async def process_promos():
                 topjoins = list(winnersids.values())
                 mentions = [types.User(id=row[0], is_bot=False, first_name=row[2]).mention_markdown(name=row[2]) for row in winners]
                 text = "winners: \n" + '\n'.join(f"{index + 1}. {mention} {topjoins[index]}" for index, mention in enumerate(mentions)) + f"\n\n[check results](https://t.me/{cfg.UBOT_USERNANE}?start=check_{task[0]})"
-            # revokeln = dbrequests.get_reflinks_torevoke(task[0])
-            # await revoke_links(task[2], revokeln)
-            joincount = dbrequests.get_joins_count(task[0])[0]
+            revokeln = dbrequests.get_reflinks_torevoke(task[0])
+            await revoke_links(task[2], revokeln)
+            joincount = dbrequests.get_joins_count(task[0], delete=True)[0]
         elif task[3].split("_")[0] == "sub":
             winners = dbrequests.get_users(winnersids)
             mentions = [types.User(id=row[0], is_bot=False, first_name=row[2]).mention_markdown(name=row[2]) for row in winners]
             text = "winners: \n" + '\n'.join(f"{index + 1}. {mention}" for index, mention in enumerate(mentions)) + f"\n\n[check results](https://t.me/{cfg.UBOT_USERNANE}?start=check_{task[0]})"
             joincount = "same as partisipants"
-        plcount = dbrequests.get_participants_count(task[0], task[3].split("_")[0])[0]
+        plcount = dbrequests.get_participants_count(task[0], task[3].split("_")[0], delete=True)[0]
         forlog = "promoId: " + str(task[0]) + "\npromo mode: " + task[3].replace('_', " ").title() + "\npromo title: " + task[4] + "\nend date: " + str(task[6]) + "\nwinners count: " + str(task[5]) + "\nparticipants: " + str(plcount) + "\nnew subs: " + str(joincount) + "\n\n" + text
         mess_id = (await ubot.send_message(cfg.WINNER_LOG_CHANNEL, forlog, parse_mode="Markdown")).message_id
         dbrequests.save_winners(task[0], mess_id)
         await bot.send_message(task[2], text, parse_mode="Markdown")
-        # await bot.send_message(task[2], "finished")
 
 
 async def revoke_links(channel_id: int, links: list):

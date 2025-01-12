@@ -71,7 +71,6 @@ async def get_upromos_inkb(uid: int) -> InlineKeyboardMarkup:
     promokb = InlineKeyboardBuilder()
     for row in dbrequests.get_upromos_db(uid):
         promokb.add(InlineKeyboardButton(text=row[1], callback_data=f"forpromo_{row[0]}"))
-        # print(f"forpromo_{row[0]}_{row[1].replace(' ', '&&')}")
     return promokb.adjust(1).as_markup()
 
 

@@ -315,12 +315,13 @@ def get_joins_count(promo_id: int, delete: bool = False):
             f"SELECT COUNT(*) FROM joins WHERE reflink_id IN ({', '.join(['?'] * len(reflink_ids))})",
             tuple(reflink_ids)
         )
+    res = cur.fetchone()
     if delete:
         cur.execute(
             f"DELETE FROM joins WHERE reflink_id IN ({', '.join(['?'] * len(reflink_ids))})",
             tuple(reflink_ids)
         )
-    return cur.fetchone()
+    return res
 
 
 def get_reflinks_torevoke(promo_id):
