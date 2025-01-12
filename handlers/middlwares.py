@@ -20,15 +20,8 @@ class CancellForAll(BaseMiddleware):
             )
             return
         if event.text == lang.cancel_all[dbrequests.userslang[event.from_user.id]]:
-        # if event.text == "Cancel":
-            # print(await data["state"].get_data())
-            # print(await data["state"].get_state())
             await data["state"].clear()
-            # print(await data["state"].get_state())
-            # print(await data["state"].get_data())
             await event.answer(
-                # "canceled",
-                # reply_markup=await kb.get_main_kb("en")
                 lang.cancel_done[dbrequests.userslang[event.from_user.id]],
                 reply_markup=await kb.get_main_kb(dbrequests.userslang[event.from_user.id])
             )

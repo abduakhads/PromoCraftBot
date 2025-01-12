@@ -2,7 +2,7 @@ from aiogram import Router, F, types
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 
-import lang
+import lang, cfg
 from handlers.helpfuncs import is_valid_datetime
 import keyboards as kb
 from database import dbrequests
@@ -21,6 +21,8 @@ class CreatePromo(StatesGroup):
     memberlimit = State()
     winner_count = State()
     expiration = State()
+    confirm = State()
+    post = State()
 
 
 @router.message(F.text.in_(lang.init_promo.values()))
@@ -141,22 +143,58 @@ async def create_promo_6(message: types.Message, state: FSMContext):
     if not (expdt := is_valid_datetime(message.text, dbrequests.get_utimdiff_db(message.from_user.id)[0][0].split(":"))):
         await message.answer("Please give expire date in format dd.mm.yyyy hh:mm")
         return
-    print(expdt)
     await state.update_data(expiration=expdt)
     await message.answer(
-        "Success",
-        reply_markup=await kb.get_main_kb(dbrequests.userslang[message.from_user.id])
+        "is it corrrect?",
+        reply_markup=await kb.get_confirm_inkb(dbrequests.userslang[message.from_user.id])
     )
+    await state.set_state(CreatePromo.confirm)
+
+
+@router.message(CreatePromo.confirm)
+async def create_promo_7can(message: types.Message):
+    pass
+
+@router.callback_query(CreatePromo.confirm, F.data.startswith('confirm'))
+async def create_promo_7(callback: types.CallbackQuery, state: FSMContext):
+    await callback.message.edit_text("confirmed")
+    await callback.message.answer("now send me your post")
+    await state.set_state(CreatePromo.post)
+    await callback.answer()
+
+
+@router.message(CreatePromo.post)
+async def create_promo_8(message: types.Message, state: FSMContext):
     data = await state.get_data()
-    dbrequests.save_promo_db(
+    promo_id = dbrequests.save_promo_db(
         message.from_user.id, data['channel_id'], f"{data['mode']}_{data['confmod']}",
-        data['title'], data['winner_count'], data['expiration'], str(await state.get_value("memberlimit"))
+        data['title'], data['winner_count'], data['expiration'], await state.get_value("memberlimit")
     )
+    
+    promo_link = "t.me/" + cfg.UBOT_USERNANE + "?start=promo_" + str(promo_id)
+    await message.copy_to(
+        message.from_user.id, 
+        reply_markup=await kb.get_postready_inkb(
+            dbrequests.userslang[message.from_user.id],
+            promo_link,
+            data["channel_id"],
+            promo_id
+        )
+    )
+    await message.answer("heres also link "+promo_link, reply_markup=await kb.get_main_kb(dbrequests.userslang[message.from_user.id]))
     await state.clear()
-    #TODO PUBLISH?
 
 
-
+@router.callback_query(F.data.startswith('publish_promo'))
+async def publish_promo(callback: types.CallbackQuery):
+    await callback.message.copy_to(
+        callback.data.split("_")[2], 
+        reply_markup=await kb.get_link_inkb(
+            lang.takepart[dbrequests.userslang[callback.from_user.id]],
+            "_".join(callback.data.split("_")[3:])
+        )
+    )
+    await callback.answer("published to channel")
 
 
     # link = await bot.create_chat_invite_link(cfg.CHANNEL_ID, f"Invitation for {update.from_user.full_name}", member_limit=1)

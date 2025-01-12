@@ -3,6 +3,10 @@ import envcfg
 BOT_TOKEN = envcfg.BOT_TOKEN
 CHANNEL_ID = envcfg.CHANNEL_ID
 SUDO_USER = envcfg.SUDO_USER
+UBOT_USERNANE = "reflinker_bot"
+UBOT_TOKEN = envcfg.UBOT_TOKEN
+WINNER_LOG_CHANNEL = envcfg.WINNER_LOG_CHANNEL
+
 
 LANGS = {
     # "set_uz": "O'zbekcha",
@@ -17,11 +21,11 @@ PROMO_MODES = {
 
 SUB_CONF = {
     "confmode_random": "Random",
-    "confmode_list": "List",
+    # "confmode_list": "List",
 }
 
 REF_CONF = {
     "confmode_random": "Random",
-    "confmode_list": "List",
+    # "confmode_list": "List",
     "confmode_most": "Most"
 }

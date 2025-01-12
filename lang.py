@@ -46,3 +46,23 @@ change_timediff = {
 settings = {
     "en": "Settings"
 }
+
+
+confirmpromo = {
+    "en": "correct"
+}
+
+
+takepart = {
+    "en": "Participate"
+}
+
+
+publish = {
+    "en": "Publish to channel"
+}
+
+
+my_links = {
+    "en": "My links"
+}

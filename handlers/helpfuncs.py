@@ -5,20 +5,17 @@ def is_valid_datetime(user_input, timedlt: list, date_format="%d.%m.%Y %H:%M"):
         end_datetime = datetime.strptime(user_input, date_format)
 
         if timedlt[0] == "1":
-            print("1")
             end_datetime -= timedelta(hours=int(timedlt[1]), minutes=int(timedlt[2]))
         elif timedlt[0] == "-1":
-            print("-1")
             end_datetime += timedelta(hours=int(timedlt[1]), minutes=int(timedlt[2]))
 
+        return end_datetime.strftime("%Y-%m-%d %H:%M:%S")
         if end_datetime >= datetime.now() + timedelta(minutes=60):
             return end_datetime.strftime("%Y-%m-%d %H:%M:%S")
         else:
             return None
     except ValueError:
         return None
-
-# print(is_valid_datetime(input(">> ")))
 
 
 def get_time_difference(user_input, date_format="%d.%m.%Y %H:%M"):

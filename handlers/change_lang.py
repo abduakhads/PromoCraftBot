@@ -30,7 +30,6 @@ async def set_lang_call(callback: types.CallbackQuery, state: FSMContext):
     await state.clear()
     dbrequests.userslang[callback.from_user.id] = callback.data.split("_")[1]
     dbrequests.upd_ulang_db(callback.from_user.id, dbrequests.userslang[callback.from_user.id])
-    print(dbrequests.userslang)
     await callback.message.delete()
     await callback.message.answer(
         text=lang.set_lang_done[dbrequests.userslang[callback.from_user.id]],
@@ -54,7 +53,6 @@ async def put_timediff(message: types.Message, state: FSMContext):
     if tim := get_time_difference(message.text):
         dbrequests.upd_utimediff_db(message.from_user.id, tim)
         await state.clear()
-        print("timstate: ", await state.get_state())
         await message.answer(
             "saved",
             reply_markup=await kb.get_main_kb(dbrequests.userslang[message.from_user.id])

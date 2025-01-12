@@ -1,7 +1,7 @@
 import cfg, lang
 
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, KeyboardButtonRequestUser
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CopyTextButton
 
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
@@ -23,11 +23,19 @@ async def cancel_all_kb(usrlang: str) -> ReplyKeyboardMarkup:
     return cancelkb
 
 
-async def get_main_kb(usrlang: str) -> ReplyKeyboardMarkup:
+async def get_main_kb(usrlang: str, player: bool = False) -> ReplyKeyboardMarkup:
+    if not player:
+        mainkb = ReplyKeyboardMarkup(
+            keyboard=[
+                [KeyboardButton(text=lang.init_promo[usrlang]), KeyboardButton(text=lang.settings[usrlang])],
+                [KeyboardButton(text=lang.my_promos[usrlang]), KeyboardButton(text=lang.my_channels[usrlang])]
+            ],
+            is_persistent = True, resize_keyboard=True
+        )
+        return mainkb
     mainkb = ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text=lang.init_promo[usrlang]), KeyboardButton(text=lang.settings[usrlang])],
-            [KeyboardButton(text=lang.my_promos[usrlang]), KeyboardButton(text=lang.my_channels[usrlang])]
+            [KeyboardButton(text=lang.my_links[usrlang]), KeyboardButton(text=lang.change_lang[usrlang])],
         ],
         is_persistent = True, resize_keyboard=True
     )
@@ -62,7 +70,8 @@ async def get_uchannels_inkb(uid: int) -> InlineKeyboardMarkup:
 async def get_upromos_inkb(uid: int) -> InlineKeyboardMarkup:
     promokb = InlineKeyboardBuilder()
     for row in dbrequests.get_upromos_db(uid):
-        promokb.add(InlineKeyboardButton(text=row[1], callback_data=f"forpromo_{row[0]}_{row[1]}"))
+        promokb.add(InlineKeyboardButton(text=row[1], callback_data=f"forpromo_{row[0]}"))
+        # print(f"forpromo_{row[0]}_{row[1].replace(' ', '&&')}")
     return promokb.adjust(1).as_markup()
 
 
@@ -75,3 +84,45 @@ async def get_settings_kb(usrlang: str) -> ReplyKeyboardMarkup:
         is_persistent = True, resize_keyboard=True
     )
     return mainkb
+
+
+async def get_confirm_inkb(usrlang: str) -> InlineKeyboardMarkup:
+    confrmkb = InlineKeyboardMarkup(
+        inline_keyboard=[[
+            InlineKeyboardButton(text=lang.confirmpromo[usrlang], callback_data="confirm_promo")
+        ]]
+    )
+    return confrmkb
+
+
+async def get_postready_inkb(usrlang: str, link: str, channelid: str | int, promoid: str | int) -> InlineKeyboardMarkup:
+    kb = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text=lang.takepart[usrlang], url=link)],
+            [InlineKeyboardButton(text=lang.publish[usrlang], callback_data=f"publish_promo_{channelid}_{link}")],
+        ]
+    )
+    return kb
+
+
+async def get_link_inkb(text: str, link: str)  -> InlineKeyboardMarkup:
+    kb = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text=text, url=link)]
+        ]
+    )
+    return kb
+
+
+async def get_urelfliks_inkb(uid) -> InlineKeyboardMarkup:
+    kb = InlineKeyboardBuilder()
+    for row in dbrequests.get_reflinks(uid):
+        kb.add(InlineKeyboardButton(text=row[0], callback_data=f"forreflink_{row[2]}_{row[1]}"))
+    return kb.adjust(1).as_markup()
+
+
+# async def get_copy_inkb(text: str):
+#     kb = InlineKeyboardMarkup(
+#         [[InlineKeyboardButton(text="copy link", callback_data="ssdf", copy_text=CopyTextButton(text))]]
+#     )
+#     return kb
