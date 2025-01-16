@@ -1,11 +1,9 @@
 from aiogram import Router, F, types
 from aiogram.fsm.context import FSMContext
-from aiogram.filters import ChatMemberUpdatedFilter, IS_NOT_MEMBER, IS_MEMBER
-from aiogram.fsm.state import State, StatesGroup
 from datetime import datetime
 
 from bot import TakePart
-import lang, bot, cfg
+import lang, bot
 import keyboards as kb
 from database import dbrequests
 from aiogram.filters import BaseFilter
@@ -42,6 +40,7 @@ async def set_ulang_call(callback: types.CallbackQuery, state: FSMContext):
 
 async def register_part(user_id, promo_id):
     if not (res := dbrequests.get_promo(promo_id)):
+        await bot.ubot.send_message(user_id, "The promo expired or does not exist")
         return
     if (await bot.bot.get_chat_member(res[0], user_id)).status == "left":
         invlink = (await bot.bot.get_chat(res[0])).invite_link
@@ -73,7 +72,10 @@ async def send_unotif(user_id: int, text: str):
 
 @router.message(F.text.in_(lang.my_links.values()))
 async def show_links(message: types.Message):
-    await message.answer("choose promo", reply_markup=await kb.get_urelfliks_inkb(message.from_user.id))
+    if not (inkb := (await kb.get_urelfliks_inkb(message.from_user.id))):
+        await message.answer("you don't have any active referal links")
+        return
+    await message.answer("choose promo", reply_markup=inkb)
 
 
 @router.callback_query(F.data.startswith("forreflink"))

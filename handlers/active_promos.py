@@ -1,7 +1,4 @@
-import asyncio
-
-from aiogram import Router, F, Bot, types
-from aiogram.filters import ChatMemberUpdatedFilter, IS_NOT_MEMBER, IS_MEMBER
+from aiogram import Router, F, types
 
 import lang
 import keyboards as kb
@@ -13,9 +10,12 @@ router = Router()
 
 @router.message(F.text.in_(lang.my_promos.values()))
 async def my_promos_show(message: types.Message):
+    if not (inkb := await kb.get_upromos_inkb(message.from_user.id)):
+        await message.answer("you don't have any active promos")
+        return
     await message.answer(
             "Here your active promos",
-            reply_markup=await kb.get_upromos_inkb(message.from_user.id)
+            reply_markup=inkb
         )
     
 @router.callback_query(F.data.startswith('forpromo'))

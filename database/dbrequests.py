@@ -293,6 +293,7 @@ def save_winners(promo_id: int, mess_id: int):
     cur.execute("UPDATE promos SET winners = ? WHERE promo_id = ?", (mess_id, promo_id))
 
 
+@transaction
 def get_participants_count(promo_id: int, mode: str, delete: bool = False):
     if mode == "ref":
         cur.execute("SELECT COUNT(*) FROM reflinks WHERE promo_id = ?", (promo_id,))
@@ -307,6 +308,7 @@ def get_participants_count(promo_id: int, mode: str, delete: bool = False):
     return res
 
 
+@transaction
 def get_joins_count(promo_id: int, delete: bool = False):
     cur.execute("SELECT reflink_id FROM reflinks WHERE promo_id = ?", (promo_id,))
     res = cur.fetchall()

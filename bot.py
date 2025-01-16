@@ -1,5 +1,4 @@
 import asyncio
-import random
 
 from aiogram import Dispatcher, Bot, types, F
 from aiogram.filters import Command, CommandObject
@@ -67,6 +66,14 @@ async def process_promos():
     for task in tasks:
         # print(task)
         if not (winnersids := dbrequests.get_players(task[0], task[7], task[5], task[3].split("_")[0])):
+            if task[3].split("_")[0] == "ref":
+                revokeln = dbrequests.get_reflinks_torevoke(task[0])
+                await revoke_links(task[2], revokeln)
+                joincount = dbrequests.get_joins_count(task[0], delete=True)[0]
+            elif task[3].split("_")[0] == "sub":
+                joincount = "same as participants"
+            plcount = dbrequests.get_participants_count(task[0], task[3].split("_")[0], delete=True)[0]
+            await bot.send_message(task[1], f"There is no winners on promo: {task[4]}\n\nParticipated: {plcount}\nNew joins: {joincount}")
             continue
         if task[3].split("_")[0] == "ref":
             if task[3].split("_")[1] == "random":
@@ -127,11 +134,9 @@ async def main() -> None:
 
 @dp.startup()
 async def start_bot():
-    # await bot.revoke_chat_invite_link(-1002442689677, "https://t.me/+clsGIXl7OJ42YWUx")
-    # await bot.revoke_chat_invite_link(-1002442689677, "https://t.me/+WDRG4JzYQiM5MGEx")
     dbrequests.setup_tables_db()
     dbrequests.userslang = dbrequests.load_ulangs_db()
-    print(dbrequests.userslang)
+    # print(dbrequests.userslang)
     print("Online")
 
 

@@ -68,8 +68,10 @@ async def get_uchannels_inkb(uid: int) -> InlineKeyboardMarkup:
 
 
 async def get_upromos_inkb(uid: int) -> InlineKeyboardMarkup:
+    if not (res := dbrequests.get_upromos_db(uid)):
+        return None
     promokb = InlineKeyboardBuilder()
-    for row in dbrequests.get_upromos_db(uid):
+    for row in res:
         promokb.add(InlineKeyboardButton(text=row[1], callback_data=f"forpromo_{row[0]}"))
     return promokb.adjust(1).as_markup()
 
@@ -114,8 +116,10 @@ async def get_link_inkb(text: str, link: str)  -> InlineKeyboardMarkup:
 
 
 async def get_urelfliks_inkb(uid) -> InlineKeyboardMarkup:
+    if not (res := dbrequests.get_reflinks(uid)):
+        return None
     kb = InlineKeyboardBuilder()
-    for row in dbrequests.get_reflinks(uid):
+    for row in res:
         kb.add(InlineKeyboardButton(text=row[0], callback_data=f"forreflink_{row[2]}_{row[1]}"))
     return kb.adjust(1).as_markup()
 

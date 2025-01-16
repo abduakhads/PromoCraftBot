@@ -5,7 +5,6 @@ from aiogram.filters import ChatMemberUpdatedFilter, IS_NOT_MEMBER, IS_MEMBER, B
 
 
 import lang
-import keyboards as kb
 from database import dbrequests
 from handlers.my_activity import send_unotif
 
@@ -72,14 +71,15 @@ class ChatFilter(BaseFilter):
 
 @router.chat_member(ChatMemberUpdatedFilter(IS_MEMBER), ChatFilter())
 async def joined_channel(update: types.ChatMemberUpdated):
-    upd = update.invite_link.name.split(" ")
-    reflinkid = dbrequests.update_reflink_join(upd[0], upd[1])[0]
-    dbrequests.insert_join(reflinkid, update.from_user.id, update.chat.id)
-    await send_unotif(upd[0], f"<a href='{update.from_user.username}'>{update.from_user.full_name}</a> joined via your <a href='{update.invite_link.invite_link}'>link</a>")
+    if (upd := update.invite_link.name):
+        upd = upd.split(" ")
+        reflinkid = dbrequests.update_reflink_join(upd[0], upd[1])[0]
+        dbrequests.insert_join(reflinkid, update.from_user.id, update.chat.id)
+        await send_unotif(upd[0], f"<a href='{update.from_user.username}'>{update.from_user.full_name}</a> joined via your <a href='{update.invite_link.invite_link}'>link</a>")
 
 
 @router.chat_member(ChatMemberUpdatedFilter(IS_NOT_MEMBER))
-async def joined_channel(update: types.ChatMemberUpdated, bot: Bot):
+async def left_channel(update: types.ChatMemberUpdated, bot: Bot):
     res = dbrequests.del_player(update.from_user.id, update.chat.id)
     # if res:
     #     for row in res:
