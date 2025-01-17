@@ -7,6 +7,7 @@ from aiogram.filters import ChatMemberUpdatedFilter, IS_NOT_MEMBER, IS_MEMBER, B
 import lang
 from database import dbrequests
 from handlers.my_activity import send_unotif
+from bot import notify_players
 
 router = Router()
 
@@ -14,13 +15,13 @@ router = Router()
 @router.message(F.text.in_(lang.my_channels.values()))
 async def my_channels_show(message: types.Message):
     if res := dbrequests.load_uchannels_db(message.from_user.id):
-        txt = "Here are your channels with me having correct rights\n\n"
+        txt = lang.on_channels[dbrequests.userslang[message.from_user.id]]
         for row in res:
             txt += f"<a href='{row[2]}'>{row[1]}</a>\n"
         await message.answer(txt, parse_mode="html")
         return
     await message.answer(
-            "You didn't add me to any channels", 
+            lang.no_channels[dbrequests.userslang[message.from_user.id]]
         )
 
 
@@ -32,14 +33,14 @@ async def added_channel(update: types.ChatMemberUpdated, bot: Bot):
         if update.new_chat_member.can_post_messages and update.new_chat_member.can_invite_users:
             await bot.send_message(
                 update.from_user.id, 
-                f"added channel <a href='{link}'>{update.chat.title}</a>",parse_mode="html"
+                lang.added_channel[dbrequests.userslang[update.from_user.id]] + f"<a href='{link}'>{update.chat.title}</a>",parse_mode="html"
             )
             dbrequests.insert_channel_db(update.chat.id, update.from_user.id, update.chat.title, link)
             return
         await bot.send_message(
             update.from_user.id, 
-            f"please give the admin rights mentioned in guide in channel: <a href='{link}'>{update.chat.title}</a>,\
-            \n\notherwise bot can't publish results or add users to channel", parse_mode="html"
+            await lang.edited_ch_from(dbrequests.userslang[update.from_user.id], update.chat.title, link), 
+            parse_mode="Markdown"
         )
         dbrequests.remove_channel_db(update.chat.id)
     except Exception as e:
@@ -52,15 +53,15 @@ async def kicked_channel(update: types.ChatMemberUpdated, bot: Bot):
     try:
         await bot.send_message(
             dbrequests.get_usrby_channel_db(update.chat.id)[0][0], #error: list index out of range(when bot kicked and data no)
-            f"bot was kicked from <a href='{dbrequests.get_channel_link_db(update.chat.id)[0][0]}'>{update.chat.title}</a>,\
-                \nyour promos related to channel are deleted",
-            parse_mode="html"
+            await lang.kicked_from_ch(dbrequests.userslang[update.from_user.id], update.chat.title, dbrequests.get_channel_link_db(update.chat.id)[0][0]),
+            parse_mode="Markdown"
         )
         #TODO delete all promos
     except Exception as e:
         print(e)
     dbrequests.remove_channel_db(update.chat.id)
-
+    if uids := dbrequests.remove_all_kicked(update.chat.id):
+        await notify_players(uids, update.chat.title)
 
 
 class ChatFilter(BaseFilter):

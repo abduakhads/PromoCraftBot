@@ -11,10 +11,10 @@ router = Router()
 @router.message(F.text.in_(lang.my_promos.values()))
 async def my_promos_show(message: types.Message):
     if not (inkb := await kb.get_upromos_inkb(message.from_user.id)):
-        await message.answer("you don't have any active promos")
+        await message.answer(lang.no_promos[dbrequests.userslang[message.from_user.id]])
         return
     await message.answer(
-            "Here your active promos",
+            lang.on_promos[dbrequests.userslang[message.from_user.id]],
             reply_markup=inkb
         )
     
@@ -23,6 +23,9 @@ async def show_promo_stats(callback: types.CallbackQuery):
     promo = dbrequests.get_promo(int(callback.data.split("_")[1]))
     plcount = dbrequests.get_participants_count(int(callback.data.split('_')[1]), promo[1].split("_")[0])[0]
     joincount = dbrequests.get_joins_count(int(callback.data.split('_')[1]))[0]
-    text = f"promoId: {callback.data.split('_')[1]}\nmode: {' '.join(promo[1].split('_'))}\nexpiration: {promo[2]}\nshould invite: {promo[3]}\nparticipants: {plcount}\njoins(for ref mode only): {joincount}"
-    await callback.message.edit_text("here your stats\n\n" + text)
+    usrlang = dbrequests.userslang[callback.from_user.id]
+    await callback.message.edit_text(
+        await lang.promo_info(usrlang, callback.data.split('_')[1], promo[1], promo[2], promo[3], plcount, joincount),
+        parse_mode="Markdown"
+    )
     await callback.answer()

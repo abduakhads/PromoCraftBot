@@ -6,7 +6,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from datetime import datetime
 
-import cfg
+import cfg, lang
 import keyboards as kb
 from database import dbrequests
 from handlers import change_lang, create_promo, add_channels, active_promos, defaultresp, my_activity
@@ -50,8 +50,9 @@ async def ustartcmd(message: types.Message, command: CommandObject, state: FSMCo
         await state.update_data(promo_id=command.args.split("_")[1])
     elif command.args and command.args.split("_")[0] == "check":
         if text := dbrequests.check_winners(command.args.split("_")[1]):
-            await ubot.copy_message(message.chat.id, cfg.WINNER_LOG_CHANNEL, text[0])
-            return
+            if text[0]:
+                await ubot.copy_message(message.chat.id, cfg.WINNER_LOG_CHANNEL, text[0])
+                return
     if not message.from_user.id in dbrequests.userslang:
         usr = [message.from_user.id, "en",
                 message.from_user.full_name, str(message.from_user.username)] #edit! change table remove not bull
@@ -105,6 +106,11 @@ async def process_promos():
 async def revoke_links(channel_id: int, links: list):
     for row in links:
         await bot.revoke_chat_invite_link(channel_id, row[0])
+
+
+async def notify_players(uids: list, title: str):
+    for uid in uids:
+        await ubot.send_message(uid, lang.promo_canceled[dbrequests.userslang[uid]] + title)
 
 
 async def run_periodic_tasks():
