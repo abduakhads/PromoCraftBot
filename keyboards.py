@@ -27,8 +27,8 @@ async def get_main_kb(usrlang: str, player: bool = False) -> ReplyKeyboardMarkup
     if not player:
         mainkb = ReplyKeyboardMarkup(
             keyboard=[
-                [KeyboardButton(text=lang.init_promo[usrlang]), KeyboardButton(text=lang.settings[usrlang])],
-                [KeyboardButton(text=lang.my_promos[usrlang]), KeyboardButton(text=lang.my_channels[usrlang])]
+                [KeyboardButton(text=lang.init_promo[usrlang]), KeyboardButton(text=lang.my_promos[usrlang])],
+                [KeyboardButton(text=lang.settings[usrlang]), KeyboardButton(text=lang.my_channels[usrlang])]
             ],
             is_persistent = True, resize_keyboard=True
         )

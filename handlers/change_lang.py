@@ -20,7 +20,7 @@ async def set_lang(message: types.Message, state: FSMContext):
     if (await state.get_state()):
         return
     await message.answer(
-        text="Please choose language:",
+        text=lang.choose_lang[dbrequests.userslang[message.from_user.id]],
         reply_markup=await kb.get_lang_inkb()
     )
 
@@ -41,7 +41,7 @@ async def set_lang_call(callback: types.CallbackQuery, state: FSMContext):
 @router.message(F.text.in_(lang.change_timediff.values()))
 async def set_timediff(message: types.Message, state: FSMContext):
     await message.answer(
-        text="Please give your time in format:",
+        text=lang.give_ur_time[dbrequests.userslang[message.from_user.id]],
         reply_markup=await kb.cancel_all_kb(dbrequests.userslang[message.from_user.id])
     )
     await state.clear()
@@ -65,6 +65,6 @@ async def put_timediff(message: types.Message, state: FSMContext):
 async def show_settings(message: types.Message, state: FSMContext):
     await state.clear()
     await message.answer(
-        "here are the settings",
+        text=lang.choose_option[dbrequests.userslang[message.from_user.id]],
         reply_markup=await kb.get_settings_kb(dbrequests.userslang[message.from_user.id])
     )

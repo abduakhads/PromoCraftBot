@@ -25,7 +25,7 @@ class TakePart(StatesGroup):
 async def startcmd(message: types.Message, state: FSMContext):
     await state.clear()
     await message.answer(
-        text="Hi, welcome to our bot!", 
+        text="👋", 
         reply_markup=types.reply_keyboard_remove.ReplyKeyboardRemove()
     )
     if not message.from_user.id in dbrequests.userslang:
@@ -35,7 +35,7 @@ async def startcmd(message: types.Message, state: FSMContext):
         await change_lang.set_lang(message, state)
         return
     await message.answer(
-        "👋",
+        "Guide",
         reply_markup=await kb.get_main_kb(dbrequests.userslang[message.from_user.id])
     )
 
@@ -59,7 +59,7 @@ async def ustartcmd(message: types.Message, command: CommandObject, state: FSMCo
         dbrequests.create_user_db(*usr)
         await my_activity.set_ulang(message)
         return 
-    await message.answer("welcome", reply_markup=await kb.get_main_kb(dbrequests.userslang[message.from_user.id], True))
+    await message.answer("👋", reply_markup=await kb.get_main_kb(dbrequests.userslang[message.from_user.id], True))
 
 
 async def process_promos():
@@ -72,32 +72,34 @@ async def process_promos():
                 await revoke_links(task[2], revokeln)
                 joincount = dbrequests.get_joins_count(task[0], delete=True)[0]
             elif task[3].split("_")[0] == "sub":
-                joincount = "same as participants"
+                joincount = "-"
             plcount = dbrequests.get_participants_count(task[0], task[3].split("_")[0], delete=True)[0]
-            await bot.send_message(task[1], f"There is no winners on promo: {task[4]}\n\nParticipated: {plcount}\nNew joins: {joincount}")
+            await bot.send_message(task[1], await lang.no_winners(dbrequests.userslang[task[1]], task[4], plcount, joincount))
             continue
+        wintxt = lang.winners_an[dbrequests.userslang[task[1]]].split("_")
         if task[3].split("_")[0] == "ref":
             if task[3].split("_")[1] == "random":
                 winners = dbrequests.get_users(winnersids)
                 mentions = [types.User(id=row[0], is_bot=False, first_name=row[2]).mention_markdown(name=row[2]) for row in winners]
-                text = "winners: \n" + '\n'.join(f"{index + 1}. {mention}" for index, mention in enumerate(mentions)) + f"\n\n[check results](https://t.me/{cfg.UBOT_USERNANE}?start=check_{task[0]})"
+                text = f"{wintxt[0]}: \n" + '\n'.join(f"{index + 1}. {mention}" for index, mention in enumerate(mentions)) + f"\n\n[{wintxt[1]}](https://t.me/{cfg.UBOT_USERNANE}?start=check_{task[0]})"
             elif task[3].split("_")[1] == "most":
                 winners = dbrequests.get_users(winnersids.keys())
                 winners = sorted(winners, key=lambda x: list(winnersids.keys()).index(x[0]))
                 # ids = [row[0] for row in winners]
                 topjoins = list(winnersids.values())
                 mentions = [types.User(id=row[0], is_bot=False, first_name=row[2]).mention_markdown(name=row[2]) for row in winners]
-                text = "winners: \n" + '\n'.join(f"{index + 1}. {mention} {topjoins[index]}" for index, mention in enumerate(mentions)) + f"\n\n[check results](https://t.me/{cfg.UBOT_USERNANE}?start=check_{task[0]})"
+                text = f"{wintxt[0]}: \n" + '\n'.join(f"{index + 1}. {mention} {topjoins[index]}" for index, mention in enumerate(mentions)) + f"\n\n[{wintxt[1]}](https://t.me/{cfg.UBOT_USERNANE}?start=check_{task[0]})"
             revokeln = dbrequests.get_reflinks_torevoke(task[0])
             await revoke_links(task[2], revokeln)
             joincount = dbrequests.get_joins_count(task[0], delete=True)[0]
         elif task[3].split("_")[0] == "sub":
             winners = dbrequests.get_users(winnersids)
             mentions = [types.User(id=row[0], is_bot=False, first_name=row[2]).mention_markdown(name=row[2]) for row in winners]
-            text = "winners: \n" + '\n'.join(f"{index + 1}. {mention}" for index, mention in enumerate(mentions)) + f"\n\n[check results](https://t.me/{cfg.UBOT_USERNANE}?start=check_{task[0]})"
-            joincount = "same as partisipants"
+            text = f"{wintxt[0]}: \n" + '\n'.join(f"{index + 1}. {mention}" for index, mention in enumerate(mentions)) + f"\n\n[{wintxt[1]}](https://t.me/{cfg.UBOT_USERNANE}?start=check_{task[0]})"
+            joincount = "-"
         plcount = dbrequests.get_participants_count(task[0], task[3].split("_")[0], delete=True)[0]
-        forlog = "promoId: " + str(task[0]) + "\npromo mode: " + task[3].replace('_', " ").title() + "\npromo title: " + task[4] + "\nend date: " + str(task[6]) + "\nwinners count: " + str(task[5]) + "\nparticipants: " + str(plcount) + "\nnew subs: " + str(joincount) + "\n\n" + text
+        # forlog = "promoId: " + str(task[0]) + "\npromo mode: " + task[3].replace('_', " ").title() + "\npromo title: " + task[4] + "\nend date: " + str(task[6]) + "\nwinners count: " + str(task[5]) + "\nparticipants: " + str(plcount) + "\nnew subs: " + str(joincount) + "\n\n" + text
+        forlog = await lang.promo_info(dbrequests.userslang[task[1]], task[0], task[3], task[6], task[7], plcount, joincount, task[4], task[5]) + "\n\n" + text
         mess_id = (await ubot.send_message(cfg.WINNER_LOG_CHANNEL, forlog, parse_mode="Markdown")).message_id
         dbrequests.save_winners(task[0], mess_id)
         await bot.send_message(task[2], text, parse_mode="Markdown")

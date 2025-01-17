@@ -136,7 +136,7 @@ def upd_utimediff_db(user_id: int, timediff: str):
 
 def get_promo(promo_id: int):
     cur.execute(
-        "SELECT channel_id, mode, expiration, memberlimit FROM promos WHERE status = 1 AND promo_id = ?", (promo_id,)
+        "SELECT channel_id, mode, expiration, memberlimit, title, winner_count FROM promos WHERE status = 1 AND promo_id = ?", (promo_id,)
     )
     return cur.fetchone()
 
@@ -261,7 +261,7 @@ def get_players(promo_id: int, joins: int | None, winners: int, mode: str):
         )
     elif mode == "ref":
         cur.execute(
-            "SELECT user_id, joins FROM reflinks WHERE is_sub = 1 AND promo_id = ? ORDER BY joins DESC, reflink_id ASC LIMIT ?",
+            "SELECT user_id, joins FROM reflinks WHERE is_sub = 1 AND joins > 0 AND promo_id = ? ORDER BY joins DESC, reflink_id ASC LIMIT ?",
             (promo_id, winners)
         )
     elif mode == "sub":
@@ -337,17 +337,14 @@ def remove_all_kicked(channel_id):
     cur.execute(
         "UPDATE promos SET status = -1 WHERE status = 1 AND channel_id = ? RETURNING promo_id", (channel_id,)
     )
-    print(1)
+
     if not (pids := cur.fetchall()):
-        print("none")
         return uids
     pids = tuple(x[0] for x in pids)
-    print(pids)
     cur.execute(
         f"DELETE FROM subs WHERE promo_id IN ({', '.join(['?'] * len(pids))}) RETURNING user_id",
         pids
     )
-    print(2)
     if res := cur.fetchall():
         uids += [x[0] for x in res]
     
@@ -355,13 +352,10 @@ def remove_all_kicked(channel_id):
         f"DELETE FROM reflinks WHERE promo_id IN ({', '.join(['?'] * len(pids))}) RETURNING user_id, reflink_id", #TODO return links to invoke after bot is kicked from channel
         pids
     )
-    print(3)
     if res := cur.fetchall():
-        print("ref:", res)
         uids += [x[0] for x in res]
         cur.execute(
             f"DELETE FROM joins WHERE reflink_id IN ({', '.join(['?'] * len(res))})",
             tuple(x[1] for x in res)
         )
-        print(4)
     return uids

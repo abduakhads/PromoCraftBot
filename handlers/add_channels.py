@@ -56,7 +56,6 @@ async def kicked_channel(update: types.ChatMemberUpdated, bot: Bot):
             await lang.kicked_from_ch(dbrequests.userslang[update.from_user.id], update.chat.title, dbrequests.get_channel_link_db(update.chat.id)[0][0]),
             parse_mode="Markdown"
         )
-        #TODO delete all promos
     except Exception as e:
         print(e)
     dbrequests.remove_channel_db(update.chat.id)
@@ -76,7 +75,7 @@ async def joined_channel(update: types.ChatMemberUpdated):
         upd = upd.split(" ")
         reflinkid = dbrequests.update_reflink_join(upd[0], upd[1])[0]
         dbrequests.insert_join(reflinkid, update.from_user.id, update.chat.id)
-        await send_unotif(upd[0], f"<a href='{update.from_user.username}'>{update.from_user.full_name}</a> joined via your <a href='{update.invite_link.invite_link}'>link</a>")
+        await send_unotif(upd[0], f"<a href='{update.from_user.username}'>{update.from_user.full_name}</a> {lang.ref_joined[dbrequests.userslang[int(upd[0])]]} <a href='{update.invite_link.invite_link}'>link</a>")
 
 
 @router.chat_member(ChatMemberUpdatedFilter(IS_NOT_MEMBER))
@@ -86,7 +85,7 @@ async def left_channel(update: types.ChatMemberUpdated, bot: Bot):
     #     for row in res:
     #         await bot.revoke_chat_invite_link(update.chat.id, row[0])
     if uid := dbrequests.del_join(update.from_user.id, update.chat.id):
-        await send_unotif(uid[0], f"<a href='https://t.me/{update.from_user.username}'>{update.from_user.full_name}</a> left channel <a href='{(await bot.get_chat(update.chat.id)).invite_link}'> {update.chat.title}</a>")
+        await send_unotif(uid[0], f"<a href='https://t.me/{update.from_user.username}'>{update.from_user.full_name}</a> {lang.ref_left[dbrequests.userslang[uid[0]]]} <a href='{(await bot.get_chat(update.chat.id)).invite_link}'> {update.chat.title}</a>")
 
 
 @router.chat_member(ChatMemberUpdatedFilter(IS_MEMBER))

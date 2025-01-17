@@ -25,7 +25,7 @@ async def show_promo_stats(callback: types.CallbackQuery):
     joincount = dbrequests.get_joins_count(int(callback.data.split('_')[1]))[0]
     usrlang = dbrequests.userslang[callback.from_user.id]
     await callback.message.edit_text(
-        await lang.promo_info(usrlang, callback.data.split('_')[1], promo[1], promo[2], promo[3], plcount, joincount),
+        await lang.promo_info(usrlang, callback.data.split('_')[1], promo[1], promo[2], promo[3], plcount, joincount, promo[4], promo[5]),
         parse_mode="Markdown"
     )
     await callback.answer()
