@@ -70,6 +70,7 @@ def upd_ulang_db(user_id: int, lang: str):
 
 @transaction
 def create_user_db(user_id: int, lang: str, fullname: str, username: str):
+    userslang[user_id] = lang
     cur.execute(
         "INSERT INTO users(user_id, lang, fullname, username) VALUES (?, ?, ?, ?)", 
         (user_id, lang, fullname, username)
