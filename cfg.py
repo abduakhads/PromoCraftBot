@@ -9,14 +9,14 @@ WINNER_LOG_CHANNEL = envcfg.WINNER_LOG_CHANNEL
 
 
 LANGS = {
-    # "set_uz": "O'zbekcha",
-    # "set_ru": "Русский",
+    "set_uz": "O'zbekcha",
+    "set_ru": "Русский",
     "set_en": "English"
 }
 
 PROMO_MODES = {
-    "mode_sub": "Subscribe",
-    "mode_ref": "Invite"
+    "mode_sub": "Subscription",
+    "mode_ref": "Referral"
 }
 
 SUB_CONF = {
