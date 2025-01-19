@@ -42,10 +42,16 @@ async def register_part(user_id, promo_id):
     if not (res := dbrequests.get_promo(promo_id)):
         await bot.ubot.send_message(user_id, text=lang.promo_exp[dbrequests.userslang[user_id]], reply_markup=await kb.get_main_kb(dbrequests.userslang[user_id], True))
         return
-    if (await bot.bot.get_chat_member(res[0], user_id)).status == "left":
-        invlink = (await bot.bot.get_chat(res[0])).invite_link
+    try:
+        if (await bot.bot.get_chat_member(res[0], user_id)).status == "left":
+            invlink = (await bot.bot.get_chat(res[0])).invite_link
+            await bot.ubot.send_message(user_id, lang.sub_first[dbrequests.userslang[user_id]] + f"<a href='{invlink}'>Subscribe</a>", parse_mode="html", reply_markup=await kb.get_main_kb(dbrequests.userslang[user_id], True))
+            return
+    except Exception as e:
+        print("Error in player:start?promo", e)
         await bot.ubot.send_message(user_id, lang.sub_first[dbrequests.userslang[user_id]] + f"<a href='{invlink}'>Subscribe</a>", parse_mode="html", reply_markup=await kb.get_main_kb(dbrequests.userslang[user_id], True))
         return
+
     if res[1].startswith("ref"):
         if promo := dbrequests.get_reflink(user_id, promo_id):
             await bot.ubot.send_message(user_id, lang.ur_reflink[dbrequests.userslang[user_id]] + promo[1], reply_markup=await kb.get_main_kb(dbrequests.userslang[user_id], True))
