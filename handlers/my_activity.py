@@ -40,25 +40,25 @@ async def set_ulang_call(callback: types.CallbackQuery, state: FSMContext):
 
 async def register_part(user_id, promo_id):
     if not (res := dbrequests.get_promo(promo_id)):
-        await bot.ubot.send_message(user_id, text=lang.promo_exp[dbrequests.userslang[user_id]])
+        await bot.ubot.send_message(user_id, text=lang.promo_exp[dbrequests.userslang[user_id]], reply_markup=await kb.get_main_kb(dbrequests.userslang[user_id], True))
         return
     if (await bot.bot.get_chat_member(res[0], user_id)).status == "left":
         invlink = (await bot.bot.get_chat(res[0])).invite_link
-        await bot.ubot.send_message(user_id, lang.sub_first[dbrequests.userslang[user_id]] + f"<a href='{invlink}'>Subscribe</a>", parse_mode="html")
+        await bot.ubot.send_message(user_id, lang.sub_first[dbrequests.userslang[user_id]] + f"<a href='{invlink}'>Subscribe</a>", parse_mode="html", reply_markup=await kb.get_main_kb(dbrequests.userslang[user_id], True))
         return
     if res[1].startswith("ref"):
         if promo := dbrequests.get_reflink(user_id, promo_id):
-            await bot.ubot.send_message(user_id, lang.ur_reflink[dbrequests.userslang[user_id]] + promo[1])
+            await bot.ubot.send_message(user_id, lang.ur_reflink[dbrequests.userslang[user_id]] + promo[1], reply_markup=await kb.get_main_kb(dbrequests.userslang[user_id], True))
             return
         chatlink = await bot.bot.create_chat_invite_link(
             res[0], f"{user_id} {promo_id}", datetime.strptime(res[2], '%Y-%m-%d %H:%M:%S'), res[3]
         )
         dbrequests.set_reflink(user_id, promo_id, chatlink.invite_link)
-        await bot.ubot.send_message(user_id, lang.ur_reflink[dbrequests.userslang[user_id]] + chatlink.invite_link)
+        await bot.ubot.send_message(user_id, lang.ur_reflink[dbrequests.userslang[user_id]] + chatlink.invite_link, reply_markup=await kb.get_main_kb(dbrequests.userslang[user_id], True))
     elif res[1].startswith("sub"):
         if not dbrequests.get_sub(user_id, promo_id):
             dbrequests.insert_sub(user_id, promo_id)
-        await bot.ubot.send_message(user_id, lang.done_par[dbrequests.userslang[user_id]])
+        await bot.ubot.send_message(user_id, lang.done_par[dbrequests.userslang[user_id]], reply_markup=await kb.get_main_kb(dbrequests.userslang[user_id], True))
 
 
 @router.callback_query(F.data.startswith("set"))
@@ -81,8 +81,11 @@ async def show_links(message: types.Message):
 @router.callback_query(F.data.startswith("forreflink"))
 async def show_links_call(callback: types.CallbackQuery):
     await callback.message.edit_text(
-        text=await lang.inv_info(dbrequests.userslang[callback.from_user.id], callback.data.split('_')[1], '_'.join(callback.data.split('_')[2:]) )
+        text=await lang.inv_info(dbrequests.userslang[callback.from_user.id], callback.data.split('_')[1], '_'.join(callback.data.split('_')[2:])),
         # f"People joined: {callback.data.split('_')[1]}\n\nLink: {'_'.join(callback.data.split('_')[2:])}",
-        # reply_markup=await kb.get_copy_inkb('_'.join(callback.data.split('_')[2:]))
+        reply_markup=await kb.get_copy_inkb(
+            text=lang.cpy_link[dbrequests.userslang[callback.from_user.id]],
+            cpy='_'.join(callback.data.split('_')[2:])
+        )
     )
     await callback.answer()

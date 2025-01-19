@@ -69,9 +69,9 @@ confirmpromo = {
 
 
 takepart = {
-    "en": "Participate",
-    "uz": "Ishtirok etish",
-    "ru": "Участвовать"
+    "en": "Participate 🚀",
+    "uz": "Ishtirok etish 🚀",
+    "ru": "Участвовать 🚀"
 }
 
 
@@ -108,7 +108,7 @@ async def promo_info(usrlang: str, promo_id, mode, exp, inv, par, joins, title, 
         "ref": {
             "en": f"*Promo ID:* {promo_id}\n*Title:* {title}\n*Type:* Referral {mode.split('_')[1]}\n*Expires:* {exp}\n*Should invite (for random sub mode only):* {inv}\n\n*Participants:* {par}\n*New joins:* {joins}\n\n*Number of winners:* {winners}",
             "uz": f"*Promo ID:* {promo_id}\n*Sarlavhasi:* {title}\n*Turi:* Referral {mode.split('_')[1]}\n*Tugash muddati:* {exp}\n*Taklif qilish kerak (faqat random rejim uchun):* {inv}\n\n*Ishtirokchilar:* {par}\n*Yangi qo'shilganlar:* {joins}\n\n*G'oliblar soni:* {winners}",
-            "uz": f"*Промо ID:* {promo_id}\n*Заголовок:* {title}\n*Тип:* Referral {mode.split('_')[1]}\n*Истекает:* {exp}\n*Нужно пригласить (только для рандом режима):* {inv}\n\n*Участники:* {par}\n*Новые подписчики:* {joins}\n\n*Количество победителей:* {winners}"
+            "ru": f"*Промо ID:* {promo_id}\n*Заголовок:* {title}\n*Тип:* Referral {mode.split('_')[1]}\n*Истекает:* {exp}\n*Нужно пригласить (только для рандом режима):* {inv}\n\n*Участники:* {par}\n*Новые подписчики:* {joins}\n\n*Количество победителей:* {winners}"
         },
         "sub": {
             "en": f"*Promo ID:* {promo_id}\n*Title:* {title}\n*Mode:* Subscription {mode.split('_')[1]}\n*Expires:* {exp}\n\n*Participants:* {par}\n\n*Number of winners:* {winners}",
@@ -164,7 +164,7 @@ async def kicked_from_ch(usrlang: str, title: str, link: str):
 promo_canceled = {
     "en": "Promo was calceled in channel ",
     "uz": "Quyidagi kanalda promo bekor qilindi",
-    "ru": "Промо было отменено в канале"
+    "ru": "Промо было отменено в канале "
 }
 
 
@@ -328,7 +328,7 @@ sub_first = {
 ur_reflink = {
     "en": "Here is your referral link (via which you can invite) ",
     "uz": "Mana sizning havolangiz (u orqali boshqalarni taklif qilishingiz mumkin) ",
-    "ru": "Вот ваша реферальная ссылка (по которой вы можете приглашать) "
+    "ru": "Вот ваша реферальная ссылка (по которой вы можете пригласить) "
 }
 
 
@@ -348,9 +348,9 @@ no_reflinks = {
 
 async def inv_info(usrlang, joined, link):
     res = {
-        "en": f"People joined: {joined}\n\nLink: {link}",
-        "uz": f"Qo'shilganlar soni: {joined}\n\nHavola: {link}",
-        "ru": f"Присоединились: {joined}\n\nСсылка: {link}"
+        "en": f"People joined: {joined}\n\nReferкal link:\n{link}",
+        "uz": f"Qo'shilganlar soni: {joined}\n\nReferral havola:\n{link}",
+        "ru": f"Присоединились: {joined}\n\nРеферальная ссылка:\n{link}"
     }
     return res[usrlang]
 
@@ -365,7 +365,21 @@ async def no_winners(usrlang, promo, plcount, joincount):
 
 
 winners_an =  {
-    "en": "winners_check results",
-    "uz": "g'oliblar_natijalarni tekshirish",
-    "ru": "победители_проверить результаты"
+    "en": "🏆 winners_Check results 🔍",
+    "uz": "🏆 g'oliblar_Natijalarni tekshirish 🔍",
+    "ru": "🏆 победители_Проверить результаты 🔍"
+}
+
+
+link_to_promo = {
+    "en": "✅ Done!\n\nLink to promo: ",
+    "uz": "✅ Tayyor!\n\nPromoga havola: ",
+    "ru": "✅ Готово!\n\nСсылка на промо: "
+}
+
+
+cpy_link = {
+    "en": "Copy link",
+    "uz": "Havolani nusxalash",
+    "ru": "Скопировать ссылку" 
 }

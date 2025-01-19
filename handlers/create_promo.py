@@ -187,7 +187,17 @@ async def create_promo_8(message: types.Message, state: FSMContext):
             promo_id
         )
     )
-    await message.answer("Link "+ promo_link, reply_markup=await kb.get_main_kb(dbrequests.userslang[message.from_user.id]))
+    await message.answer(
+        lang.link_to_promo[dbrequests.userslang[message.from_user.id]], 
+        reply_markup=await kb.get_main_kb(dbrequests.userslang[message.from_user.id])
+    )
+    await message.answer(
+        promo_link, 
+        reply_markup=await kb.get_copy_inkb(
+            text=lang.cpy_link[dbrequests.userslang[message.from_user.id]],
+            cpy=promo_link
+        )
+    )
     await state.clear()
 
 

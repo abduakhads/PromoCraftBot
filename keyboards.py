@@ -124,8 +124,17 @@ async def get_urelfliks_inkb(uid) -> InlineKeyboardMarkup:
     return kb.adjust(1).as_markup()
 
 
-# async def get_copy_inkb(text: str):
-#     kb = InlineKeyboardMarkup(
-#         [[InlineKeyboardButton(text="copy link", callback_data="ssdf", copy_text=CopyTextButton(text))]]
-#     )
-#     return kb
+async def check_res_inkb(text: str, link: str):
+    kb = InlineKeyboardMarkup(
+        [[InlineKeyboardButton(text=text, url=link)]]
+    )
+    return kb
+
+
+async def get_copy_inkb(text: str, cpy: str)  -> InlineKeyboardMarkup:
+    kb = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text=text, copy_text=CopyTextButton(text=cpy))]
+        ]
+    )
+    return kb

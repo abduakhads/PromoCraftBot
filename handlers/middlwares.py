@@ -23,7 +23,7 @@ class CancellForAll(BaseMiddleware):
             await data["state"].clear()
             await event.answer(
                 lang.cancel_done[dbrequests.userslang[event.from_user.id]],
-                reply_markup=await kb.get_main_kb(dbrequests.userslang[event.from_user.id])
+                reply_markup=await kb.get_main_kb(dbrequests.userslang[event.from_user.id],)
             )
         else:
             return await handler(event, data)

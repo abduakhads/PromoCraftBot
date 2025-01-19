@@ -1,9 +1,7 @@
 import envcfg
 
 BOT_TOKEN = envcfg.BOT_TOKEN
-CHANNEL_ID = envcfg.CHANNEL_ID
-SUDO_USER = envcfg.SUDO_USER
-UBOT_USERNANE = "reflinker_bot"
+UBOT_USERNANE = envcfg.UBOT_USERNAME
 UBOT_TOKEN = envcfg.UBOT_TOKEN
 WINNER_LOG_CHANNEL = envcfg.WINNER_LOG_CHANNEL
 
@@ -29,3 +27,9 @@ REF_CONF = {
     # "confmode_list": "List",
     "confmode_most": "Most"
 }
+
+
+if __name__ == "__main__":
+    from database import dbrequests
+    dbrequests.setup_tables_db()
+    print("done")

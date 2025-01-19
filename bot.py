@@ -81,28 +81,28 @@ async def process_promos():
             if task[3].split("_")[1] == "random":
                 winners = dbrequests.get_users(winnersids)
                 mentions = [types.User(id=row[0], is_bot=False, first_name=row[2]).mention_markdown(name=row[2]) for row in winners]
-                text = f"{wintxt[0]}: \n" + '\n'.join(f"{index + 1}. {mention}" for index, mention in enumerate(mentions)) + f"\n\n[{wintxt[1]}](https://t.me/{cfg.UBOT_USERNANE}?start=check_{task[0]})"
+                text = f"{wintxt[0]}: \n\n" + '\n'.join(f"{index + 1}. {mention}" for index, mention in enumerate(mentions))
             elif task[3].split("_")[1] == "most":
                 winners = dbrequests.get_users(winnersids.keys())
                 winners = sorted(winners, key=lambda x: list(winnersids.keys()).index(x[0]))
                 # ids = [row[0] for row in winners]
                 topjoins = list(winnersids.values())
                 mentions = [types.User(id=row[0], is_bot=False, first_name=row[2]).mention_markdown(name=row[2]) for row in winners]
-                text = f"{wintxt[0]}: \n" + '\n'.join(f"{index + 1}. {mention} {topjoins[index]}" for index, mention in enumerate(mentions)) + f"\n\n[{wintxt[1]}](https://t.me/{cfg.UBOT_USERNANE}?start=check_{task[0]})"
+                text = f"{wintxt[0]}: \n\n" + '\n'.join(f"{index + 1}. {mention} {topjoins[index]}" for index, mention in enumerate(mentions))
             revokeln = dbrequests.get_reflinks_torevoke(task[0])
             await revoke_links(task[2], revokeln)
             joincount = dbrequests.get_joins_count(task[0], delete=True)[0]
         elif task[3].split("_")[0] == "sub":
             winners = dbrequests.get_users(winnersids)
             mentions = [types.User(id=row[0], is_bot=False, first_name=row[2]).mention_markdown(name=row[2]) for row in winners]
-            text = f"{wintxt[0]}: \n" + '\n'.join(f"{index + 1}. {mention}" for index, mention in enumerate(mentions)) + f"\n\n[{wintxt[1]}](https://t.me/{cfg.UBOT_USERNANE}?start=check_{task[0]})"
+            text = f"{wintxt[0]}: \n\n" + '\n'.join(f"{index + 1}. {mention}" for index, mention in enumerate(mentions))
             joincount = "-"
         plcount = dbrequests.get_participants_count(task[0], task[3].split("_")[0], delete=True)[0]
         # forlog = "promoId: " + str(task[0]) + "\npromo mode: " + task[3].replace('_', " ").title() + "\npromo title: " + task[4] + "\nend date: " + str(task[6]) + "\nwinners count: " + str(task[5]) + "\nparticipants: " + str(plcount) + "\nnew subs: " + str(joincount) + "\n\n" + text
-        forlog = await lang.promo_info(dbrequests.userslang[task[1]], task[0], task[3], task[6], task[7], plcount, joincount, task[4], task[5]) + "\n\n" + text
-        mess_id = (await ubot.send_message(cfg.WINNER_LOG_CHANNEL, forlog, parse_mode="Markdown")).message_id
+        forlog = await lang.promo_info(dbrequests.userslang[task[1]], task[0], task[3], task[6], task[7], plcount, joincount, task[4], task[5]) + "\n\n" + text + f"\n\n[{wintxt[1]}](https://t.me/{cfg.UBOT_USERNANE}?start=check_{task[0]})"
+        mess_id = (await ubot.send_message(cfg.WINNER_LOG_CHANNEL, forlog, parse_mode="Markdown", link_preview_options=None)).message_id
         dbrequests.save_winners(task[0], mess_id)
-        await bot.send_message(task[2], text, parse_mode="Markdown")
+        await bot.send_message(task[2], text, parse_mode="Markdown", reply_markup=await kb.get_link_inkb(wintxt[1], f"https://t.me/{cfg.UBOT_USERNANE}?start=check_{task[0]}"), link_preview_options=None)
 
 
 async def revoke_links(channel_id: int, links: list):
@@ -142,7 +142,7 @@ async def main() -> None:
 
 @dp.startup()
 async def start_bot():
-    dbrequests.setup_tables_db()
+    # dbrequests.setup_tables_db()
     dbrequests.userslang = dbrequests.load_ulangs_db()
     # print(dbrequests.userslang)
     print("Online")

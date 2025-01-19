@@ -1,6 +1,6 @@
 from aiogram import Router, F, types
 
-import lang
+import lang, cfg
 import keyboards as kb
 from database import dbrequests
 
@@ -26,6 +26,10 @@ async def show_promo_stats(callback: types.CallbackQuery):
     usrlang = dbrequests.userslang[callback.from_user.id]
     await callback.message.edit_text(
         await lang.promo_info(usrlang, callback.data.split('_')[1], promo[1], promo[2], promo[3], plcount, joincount, promo[4], promo[5]),
-        parse_mode="Markdown"
+        parse_mode="Markdown",
+        reply_markup=await kb.get_copy_inkb(
+            text=lang.cpy_link[usrlang],
+            cpy=f"t.me/{cfg.UBOT_USERNANE}?start=promo_{callback.data.split('_')[1]}"
+        )
     )
     await callback.answer()
