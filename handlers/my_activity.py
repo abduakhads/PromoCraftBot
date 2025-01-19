@@ -48,6 +48,7 @@ async def register_part(user_id, promo_id):
             await bot.ubot.send_message(user_id, lang.sub_first[dbrequests.userslang[user_id]] + f"<a href='{invlink}'>Subscribe</a>", parse_mode="html", reply_markup=await kb.get_main_kb(dbrequests.userslang[user_id], True))
             return
     except Exception as e:
+        invlink = (await bot.bot.get_chat(res[0])).invite_link
         print("Error in player:start?promo", e)
         await bot.ubot.send_message(user_id, lang.sub_first[dbrequests.userslang[user_id]] + f"<a href='{invlink}'>Subscribe</a>", parse_mode="html", reply_markup=await kb.get_main_kb(dbrequests.userslang[user_id], True))
         return
