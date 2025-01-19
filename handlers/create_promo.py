@@ -196,7 +196,8 @@ async def create_promo_8(message: types.Message, state: FSMContext):
         reply_markup=await kb.get_copy_inkb(
             text=lang.cpy_link[dbrequests.userslang[message.from_user.id]],
             cpy=promo_link
-        )
+        ),
+        link_preview_options=types.LinkPreviewOptions(is_disabled=True)
     )
     await state.clear()
 
