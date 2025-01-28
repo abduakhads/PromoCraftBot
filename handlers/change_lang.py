@@ -54,7 +54,7 @@ async def put_timediff(message: types.Message, state: FSMContext):
         dbrequests.upd_utimediff_db(message.from_user.id, tim)
         await state.clear()
         await message.answer(
-            "saved",
+            lang.saved[dbrequests.userslang[message.from_user.id]],
             reply_markup=await kb.get_main_kb(dbrequests.userslang[message.from_user.id])
         )
         return
