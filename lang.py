@@ -383,3 +383,10 @@ cpy_link = {
     "uz": "Havolani nusxalash",
     "ru": "Скопировать ссылку" 
 }
+
+
+saved = {
+    "en": "✅ Saved",
+    "uz": "✅ Saqlandi",
+    "ru": "✅ Сохранено" 
+}

@@ -96,3 +96,17 @@ async def show_links_call(callback: types.CallbackQuery):
         )
     )
     await callback.answer()
+
+
+@router.callback_query()
+async def defcallbck(callback: types.CallbackQuery):
+    try:
+        await callback.message.delete()
+    except:
+        pass
+    await callback.answer("👀")
+
+
+@router.message()
+async def defaults(message: types.Message):
+    await message.answer("👀")
