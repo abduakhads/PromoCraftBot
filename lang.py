@@ -243,16 +243,16 @@ give_title = {
 
 
 choose_mode = {
-    "en": "Choose the type\n\nmore info -> link", #TODO add link
-    "uz": "Promo turini tanlang\n\nbatafsil ma'lumot -> havola",
-    "ru": "Выберите тип\n\nподробнее -> ссылка"
+    "en": f"Choose the type\n\n[more info]({cfg.GUIDE['en']})",
+    "uz": f"Promo turini tanlang\n\n[batafsil ma'lumot]({cfg.GUIDE['uz']})",
+    "ru": f"Выберите тип\n\n[подробнее]({cfg.GUIDE['ru']})"
 }
 
 
 choose_submode = {
-    "en": "Choose the mode\n\nmore info -> link", #TODO add link
-    "uz": "Rejimni tanlang\n\nbatafsil ma'lumot -> havola",
-    "ru": "Выберите режим\n\nподробнее -> ссылка"
+    "en": f"Choose the mode\n\n[more info]({cfg.TYPES_GUIDE['en']})",
+    "uz": f"Rejimni tanlang\n\n[batafsil ma'lumot]({cfg.TYPES_GUIDE['uz']})",
+    "ru": f"Выберите режим\n\n[подробнее]({cfg.TYPES_GUIDE['ru']})"
 }
 
 

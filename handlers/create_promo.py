@@ -70,6 +70,8 @@ async def create_promo_2(message: types.Message, state: FSMContext):
     await state.update_data(title=message.text)
     await message.answer(
         text=lang.choose_mode[dbrequests.userslang[message.from_user.id]],
+        parse_mode="Markdown",
+        link_preview_options=types.LinkPreviewOptions(is_disabled=True),
         reply_markup=await kb.get_prmodes_inkb()
     )
     await state.set_state(CreatePromo.mode)
@@ -86,6 +88,8 @@ async def create_promo_3(callback: types.CallbackQuery, state: FSMContext):
     await callback.message.edit_text(f"✔️ {callback.data.split('_')[1]}")
     await callback.message.answer(
         text=lang.choose_submode[dbrequests.userslang[callback.from_user.id]],
+        parse_mode="Markdown",
+        link_preview_options=types.LinkPreviewOptions(is_disabled=True),
         reply_markup=await kb.get_prconfmodes_inkb(await state.get_value("mode"))
     )
     await state.set_state(CreatePromo.confmod)
