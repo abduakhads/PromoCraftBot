@@ -1,3 +1,6 @@
+import cfg
+
+
 set_lang_done = {
     "uz": "O'zbek tili tanlandi",
     "ru": "Выбран русский язык",
@@ -254,16 +257,16 @@ choose_submode = {
 
 
 invite_numb = {
-    "en": "Give the numbers of users participants should invite",
-    "uz": "Ishtirokchilar taklif qilishi kerak bo'lgan foydalanuvchilar sonini kiriting",
-    "ru": "Укажите количество пользователей, которых участники должны пригласить."
+    "en": "Give the numbers of users participants should invite:",
+    "uz": "Ishtirokchilar taklif qilishi kerak bo'lgan foydalanuvchilar sonini kiriting:",
+    "ru": "Укажите количество пользователей, которых участники должны пригласить:"
 }
 
 
 winners_numb = {
-    "en": "Give the number of winners",
-    "uz": "G'oliblar sonini kiriting",
-    "ru": "Укажите количество победителей"
+    "en": "Give the number of winners:",
+    "uz": "G'oliblar sonini kiriting:",
+    "ru": "Укажите количество победителей:"
 }
 
 
@@ -385,8 +388,43 @@ cpy_link = {
 }
 
 
+share_link = {
+    "en": "Share link",
+    "uz": "Havolani ulashish",
+    "ru": "Поделиться ссылкой"
+}
+
+
 saved = {
     "en": "✅ Saved",
     "uz": "✅ Saqlandi",
     "ru": "✅ Сохранено" 
+}
+
+
+read_docs = {
+    "en": f"Before continuing please read the guide on how to use the bot\n\n[Guide]({cfg.GUIDE['en']})",
+    "uz": f"Davom etishdan oldin, iltimos, botdan qanday foydalanish bo‘yicha qo‘llanma bilan tanishib chiqing\n\n[Qo‘llanma]({cfg.GUIDE['uz']})",
+    "ru": f"Прежде чем продолжить, пожалуйста, прочтите инструкцию по использованию бота\n\n[Инструкция]({cfg.GUIDE['ru']})" 
+}
+
+
+done = {
+    "en": "✅ Done",
+    "uz": "✅ Tayyor!",
+    "ru": "✅ Готово!"
+}
+
+
+need_help = {
+    "en": "If you need help or access the guide, please send /help command",
+    "uz": "Agar yordam kerak bo'lsa yoki qo'llanma, iltimos, /help buyrug'ini yuboring",
+    "ru": "Если вам нужна помощь или доступ к руководству, отправьте команду /help"
+}
+
+
+help_cmd = {
+    "en": f"If you need guide, please read [Guide]({cfg.GUIDE['en']})\n\nIf you want to know supported types of giveaways, please read [Type and Mode]({cfg.TYPES_GUIDE['en']})\n\nIf you have questions, recommendation or want to report and etc., please contact us via @{cfg.SUPUSERNAME}.\n\n--",
+    "uz": f"Agar sizga qo'llanma kerak bo'lsa [Qo‘llanma]({cfg.GUIDE['uz']})\n\nAgar qo'llab-quvvatlanadigan giveaway-lar turlari haqida bilmoqchi bo'lsangiz [Turi va Rejimi]({cfg.TYPES_GUIDE['uz']})\n\nSavollaringiz bo'lsa, tavsiya etmoqchi yoki xabar bermoqchi bo'lsangiz va hokazo, iltimos biz bilan @{cfg.SUPUSERNAME} orqali bog'laning.\n\n--",
+    "ru": f"Если вам нужно руководство, пожалуйста, прочтите [Инструкция]({cfg.GUIDE['ru']})\n\nЕсли вы хотите узнать о поддерживаемых типах розыгрышей, пожалуйста, прочтите [Тип и Режим]({cfg.TYPES_GUIDE['ru']})\n\nЕсли у вас есть вопросы, рекомендации или вы хотите сообщить и т.д., свяжитесь с нами через @{cfg.SUPUSERNAME}.\n\n--"
 }

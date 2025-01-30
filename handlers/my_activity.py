@@ -92,7 +92,8 @@ async def show_links_call(callback: types.CallbackQuery):
         # f"People joined: {callback.data.split('_')[1]}\n\nLink: {'_'.join(callback.data.split('_')[2:])}",
         reply_markup=await kb.get_copy_inkb(
             text=lang.cpy_link[dbrequests.userslang[callback.from_user.id]],
-            cpy='_'.join(callback.data.split('_')[2:])
+            cpy='_'.join(callback.data.split('_')[2:]),
+            add_share=lang.share_link[dbrequests.userslang[callback.from_user.id]]
         )
     )
     await callback.answer()

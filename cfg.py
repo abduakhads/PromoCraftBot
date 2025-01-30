@@ -4,6 +4,20 @@ BOT_TOKEN = envcfg.BOT_TOKEN
 UBOT_USERNANE = envcfg.UBOT_USERNAME
 UBOT_TOKEN = envcfg.UBOT_TOKEN
 WINNER_LOG_CHANNEL = envcfg.WINNER_LOG_CHANNEL
+SUPUSERNAME = envcfg.SUPUSERNAME
+
+GUIDE = {
+    "en": envcfg.GUIDE["en"],
+    "uz": envcfg.GUIDE["uz"],
+    "ru": envcfg.GUIDE["ru"]
+}
+
+
+TYPES_GUIDE = {
+    "en": envcfg.TYPES_GUIDE["en"],
+    "uz": envcfg.TYPES_GUIDE["uz"],
+    "ru": envcfg.TYPES_GUIDE["ru"]
+}
 
 
 LANGS = {

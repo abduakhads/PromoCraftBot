@@ -100,7 +100,7 @@ def remove_channel_db(channel_id: int):
 
 def get_usrby_channel_db(channel_id: int):
     cur.execute("SELECT user_id FROM channels WHERE channel_id = ?", (channel_id,))
-    return cur.fetchall()
+    return cur.fetchone()
 
 
 def get_channel_link_db(channel_id: int):

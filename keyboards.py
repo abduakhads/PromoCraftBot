@@ -131,10 +131,18 @@ async def check_res_inkb(text: str, link: str):
     return kb
 
 
-async def get_copy_inkb(text: str, cpy: str)  -> InlineKeyboardMarkup:
-    kb = InlineKeyboardMarkup(
+async def get_copy_inkb(text: str, cpy: str, add_share: str | None = None)  -> InlineKeyboardMarkup:
+    kb = langkb = InlineKeyboardBuilder()
+    kb.add(InlineKeyboardButton(text=text, copy_text=CopyTextButton(text=cpy)))
+    if add_share:
+        kb.add(InlineKeyboardButton(text=add_share, url=f"https://telegram.me/share/url?url={cpy}&text=👋"))
+    return kb.adjust(1).as_markup()
+
+
+async def read_docs_inkb(usrlang: str) -> InlineKeyboardMarkup:
+    inkb = InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text=text, copy_text=CopyTextButton(text=cpy))]
+            [InlineKeyboardButton(text=lang.done[usrlang], callback_data="done_read_docs")]
         ]
     )
-    return kb
+    return inkb

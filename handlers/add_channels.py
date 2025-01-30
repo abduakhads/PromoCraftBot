@@ -52,7 +52,7 @@ async def kicked_channel(update: types.ChatMemberUpdated, bot: Bot):
     await asyncio.sleep(1)
     try:
         await bot.send_message(
-            dbrequests.get_usrby_channel_db(update.chat.id)[0][0], #error: list index out of range(when bot kicked and data no)
+            int(dbrequests.get_usrby_channel_db(update.chat.id)[0]), #error: list index out of range(when bot kicked and data no)
             await lang.kicked_from_ch(dbrequests.userslang[update.from_user.id], update.chat.title, dbrequests.get_channel_link_db(update.chat.id)[0][0]),
             parse_mode="Markdown"
         )
