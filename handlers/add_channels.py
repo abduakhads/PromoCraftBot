@@ -73,9 +73,9 @@ class ChatFilter(BaseFilter):
 async def joined_channel(update: types.ChatMemberUpdated):
     if (upd := update.invite_link.name):
         upd = upd.split(" ")
-        reflinkid = dbrequests.update_reflink_join(upd[0], upd[1])[0]
-        dbrequests.insert_join(reflinkid, update.from_user.id, update.chat.id)
-        await send_unotif(upd[0], f"<a href='{update.from_user.username}'>{update.from_user.full_name}</a> {lang.ref_joined[dbrequests.userslang[int(upd[0])]]} <a href='{update.invite_link.invite_link}'>link</a>")
+        if reflinkid := dbrequests.update_reflink_join(upd[0], upd[1]):
+            dbrequests.insert_join(reflinkid[0], update.from_user.id, update.chat.id)
+            await send_unotif(upd[0], f"<a href='{update.from_user.username}'>{update.from_user.full_name}</a> {lang.ref_joined[dbrequests.userslang[int(upd[0])]]} <a href='{update.invite_link.invite_link}'>link</a>")
 
 
 @router.chat_member(ChatMemberUpdatedFilter(IS_NOT_MEMBER))
