@@ -243,9 +243,9 @@ give_title = {
 
 
 choose_mode = {
-    "en": f"Choose the type\n\n[more info]({cfg.GUIDE['en']})",
-    "uz": f"Promo turini tanlang\n\n[batafsil ma'lumot]({cfg.GUIDE['uz']})",
-    "ru": f"Выберите тип\n\n[подробнее]({cfg.GUIDE['ru']})"
+    "en": f"Choose the type\n\n[more info]({cfg.TYPES_GUIDE['en']})",
+    "uz": f"Promo turini tanlang\n\n[batafsil ma'lumot]({cfg.TYPES_GUIDE['uz']})",
+    "ru": f"Выберите тип\n\n[подробнее]({cfg.TYPES_GUIDE['ru']})"
 }
 
 
