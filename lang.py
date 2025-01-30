@@ -229,9 +229,9 @@ select_channel = {
 
 
 no_channel = {
-    "en": "Please add me to channel first",
-    "uz": "Iltimos, avval meni kanalga qo'shing",
-    "ru": "Пожалуйста, сначала добавьте меня в канал"
+    "en": "Please add me to channel and give admin rights (posting messages and adding subscribers) first.\n\n/help for guide.",
+    "uz": "Iltimos, avval meni kanalga qo'shing va kerakli administrator huquqlarini bering (xabarlarni joylashtirish va obunachilarni qo'shish).\n\n /help qo'llanma uchun",
+    "ru": "пожалуйста, сначала добавьте меня на канал и дайте права администратора (публикация сообщений и добавление подписчиков)\n\n/help для инструкции."
 }
 
 
