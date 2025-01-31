@@ -44,7 +44,7 @@ async def added_channel(update: types.ChatMemberUpdated, bot: Bot):
         )
         dbrequests.remove_channel_db(update.chat.id)
     except Exception as e:
-        print(e)
+        print("Error on add_channels.added_channel:", e)
 
 
 @router.my_chat_member(ChatMemberUpdatedFilter(IS_NOT_MEMBER))
@@ -57,7 +57,7 @@ async def kicked_channel(update: types.ChatMemberUpdated, bot: Bot):
             parse_mode="Markdown"
         )
     except Exception as e:
-        print(e)
+        print("Error on add_channels.kicked_channel:", e)
     dbrequests.remove_channel_db(update.chat.id)
     if uids := dbrequests.remove_all_kicked(update.chat.id):
         await notify_players(uids, update.chat.title)
