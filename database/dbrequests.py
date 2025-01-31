@@ -360,3 +360,11 @@ def remove_all_kicked(channel_id):
             tuple(x[1] for x in res)
         )
     return uids
+
+
+@transaction
+def put_postid_db(promo_id: int, msg_id: int):
+    cur.execute(
+        "UPDATE promos SET winners = ? WHERE promo_id = ?",
+        ((msg_id * (-1)), promo_id)
+    )

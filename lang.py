@@ -368,9 +368,9 @@ async def no_winners(usrlang, promo, plcount, joincount):
 
 
 winners_an =  {
-    "en": "🏆 winners_Check results 🔍",
-    "uz": "🏆 g'oliblar_Natijalarni tekshirish 🔍",
-    "ru": "🏆 победители_Проверить результаты 🔍"
+    "en": "🎉 Results of the giveaway:\n\n🏆 winners_Check results 🔍",
+    "uz": "🎉 Giveaway natijalari:\n\n🏆 g'oliblar_Natijalarni tekshirish 🔍",
+    "ru": "🎉 Результаты розыгрыша:\n\n🏆 победители_Проверить результаты 🔍"
 }
 
 
@@ -426,5 +426,5 @@ need_help = {
 help_cmd = {
     "en": f"If you need guide, please read [Guide]({cfg.GUIDE['en']})\n\nIf you want to know supported types of giveaways, please read [Type and Mode]({cfg.TYPES_GUIDE['en']})\n\nIf you have questions, recommendation or want to report and etc., please contact us via @{cfg.SUPUSERNAME}.\n\n--",
     "uz": f"Agar sizga qo'llanma kerak bo'lsa [Qo‘llanma]({cfg.GUIDE['uz']})\n\nAgar qo'llab-quvvatlanadigan giveaway-lar turlari haqida bilmoqchi bo'lsangiz [Turi va Rejimi]({cfg.TYPES_GUIDE['uz']})\n\nSavollaringiz bo'lsa, tavsiya etmoqchi yoki xabar bermoqchi bo'lsangiz va hokazo, iltimos biz bilan @{cfg.SUPUSERNAME} orqali bog'laning.\n\n--",
-    "ru": f"Если вам нужно руководство, пожалуйста, прочтите [Инструкция]({cfg.GUIDE['ru']})\n\nЕсли вы хотите узнать о поддерживаемых типах розыгрышей, пожалуйста, прочтите [Тип и Режим]({cfg.TYPES_GUIDE['ru']})\n\nЕсли у вас есть вопросы, рекомендации или вы хотите сообщить и т.д., свяжитесь с нами через @{cfg.SUPUSERNAME}.\n\n--"
+    "ru": f"Если вам нужно руководство, пожалуйста, прочтите [Инструкцию]({cfg.GUIDE['ru']})\n\nЕсли вы хотите узнать о поддерживаемых типах розыгрышей, пожалуйста, прочтите [Тип и Режим]({cfg.TYPES_GUIDE['ru']})\n\nЕсли у вас есть вопросы, рекомендации или вы хотите что-то сообщить и т.д., свяжитесь с нами через @{cfg.SUPUSERNAME}.\n\n--"
 }

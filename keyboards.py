@@ -100,7 +100,7 @@ async def get_postready_inkb(usrlang: str, link: str, channelid: str | int, prom
     kb = InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text=lang.takepart[usrlang], url=link)],
-            [InlineKeyboardButton(text=lang.publish[usrlang], callback_data=f"publish_promo_{channelid}_{link}")],
+            [InlineKeyboardButton(text=lang.publish[usrlang], callback_data=f"publish_{promoid}_{channelid}_{link}")],
         ]
     )
     return kb

@@ -206,15 +206,16 @@ async def create_promo_8(message: types.Message, state: FSMContext):
     await state.clear()
 
 
-@router.callback_query(F.data.startswith('publish_promo'))
+@router.callback_query(F.data.startswith('publish'))
 async def publish_promo(callback: types.CallbackQuery):
-    await callback.message.copy_to(
+    msg_id = await callback.message.copy_to(
         callback.data.split("_")[2], 
         reply_markup=await kb.get_link_inkb(
             lang.takepart[dbrequests.userslang[callback.from_user.id]],
             "_".join(callback.data.split("_")[3:])
         )
     )
+    dbrequests.put_postid_db(callback.data.split("_")[1], msg_id.message_id)
     await callback.answer(
         text=lang.published[dbrequests.userslang[callback.from_user.id]]
     )
