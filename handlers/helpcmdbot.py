@@ -1,16 +1,24 @@
 from aiogram import Router, types, F
 from aiogram.filters import Command
+from aiogram.fsm.context import FSMContext
 
 import lang
 from database import dbrequests
 import keyboards as kb
+from handlers.change_lang import StartReadDoc
 
 
 router = Router()
 
 
+@router.message(StartReadDoc.read_doc)
+async def mesg_del_onstart(message: types.Message):
+    await message.delete()
+
+
 @router.callback_query(F.data.startswith("done_read"))
-async def done_read_docs(callback: types.CallbackQuery):
+async def done_read_docs(callback: types.CallbackQuery, state: FSMContext):
+    await state.clear()
     await callback.message.delete()
     await callback.message.answer(
         text=lang.need_help[dbrequests.userslang[callback.from_user.id]],
