@@ -180,7 +180,7 @@ ref_joined = {
 
 ref_left = {
     "en": "left channel",
-    "uz": "kanaldan chiqib ketdi",
+    "uz": "quyidagi kanaldan chiqib ketdi",
     "ru": "покинул канал"
 }
 
