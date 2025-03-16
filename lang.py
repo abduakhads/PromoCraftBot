@@ -428,3 +428,10 @@ help_cmd = {
     "uz": f"Agar sizga qo'llanma kerak bo'lsa [Qo‘llanma]({cfg.GUIDE['uz']})\n\nAgar qo'llab-quvvatlanadigan giveaway-lar turlari haqida bilmoqchi bo'lsangiz [Turi va Rejimi]({cfg.TYPES_GUIDE['uz']})\n\nSavollaringiz bo'lsa, tavsiya etmoqchi yoki xabar bermoqchi bo'lsangiz va hokazo, iltimos biz bilan @{cfg.SUPUSERNAME} orqali bog'laning.\n\n--",
     "ru": f"Если вам нужно руководство, пожалуйста, прочтите [Инструкцию]({cfg.GUIDE['ru']})\n\nЕсли вы хотите узнать о поддерживаемых типах розыгрышей, пожалуйста, прочтите [Тип и Режим]({cfg.TYPES_GUIDE['ru']})\n\nЕсли у вас есть вопросы, рекомендации или вы хотите что-то сообщить и т.д., свяжитесь с нами через @{cfg.SUPUSERNAME}.\n\n--"
 }
+
+
+sup_type = {
+    "en": "Bot only supports channels and super groups",
+    "uz": "Bot faqat kanal va super guruhlarni qo‘llab quvvatlaydi",
+    "ru": "Бот поддерживает только каналы и супер группы"
+}

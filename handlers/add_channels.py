@@ -27,6 +27,12 @@ async def my_channels_show(message: types.Message):
 
 @router.my_chat_member(ChatMemberUpdatedFilter(IS_MEMBER))
 async def added_channel(update: types.ChatMemberUpdated, bot: Bot):
+    if update.chat.type == "group":
+        await bot.send_message(
+            update.from_user.id,
+            lang.sup_type[dbrequests.userslang[update.from_user.id]]
+        )
+        return
     await asyncio.sleep(1)
     try:
         link = f"t.me/{update.chat.username}" if (update.chat.username) else (await bot.get_chat(update.chat.id)).invite_link 
