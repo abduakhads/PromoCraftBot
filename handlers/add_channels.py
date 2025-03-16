@@ -30,7 +30,7 @@ async def added_channel(update: types.ChatMemberUpdated, bot: Bot):
     await asyncio.sleep(1)
     try:
         link = f"t.me/{update.chat.username}" if (update.chat.username) else (await bot.get_chat(update.chat.id)).invite_link 
-        gr_flag = update.chat.type in ["supergroup", "group"] or update.new_chat_member.can_post_messages
+        gr_flag = update.chat.type == "supergroup" or update.new_chat_member.can_post_messages
         if type(update.new_chat_member) == types.ChatMemberAdministrator and gr_flag and update.new_chat_member.can_invite_users:
             await bot.send_message(
                 update.from_user.id, 

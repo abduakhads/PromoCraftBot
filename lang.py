@@ -109,14 +109,14 @@ on_promos = {
 async def promo_info(usrlang: str, promo_id, mode, exp, inv, par, joins, title, winners):
     info = {
         "ref": {
-            "en": f"*Promo ID:* {promo_id}\n*Title:* {title}\n*Type:* Referral {mode.split('_')[1]}\n*Expires:* {exp}\n*Should invite (for random sub mode only):* {inv}\n\n*Participants:* {par}\n*New joins:* {joins}\n\n*Number of winners:* {winners}",
-            "uz": f"*Promo ID:* {promo_id}\n*Sarlavhasi:* {title}\n*Turi:* Referral {mode.split('_')[1]}\n*Tugash muddati:* {exp}\n*Taklif qilish kerak (faqat random rejim uchun):* {inv}\n\n*Ishtirokchilar:* {par}\n*Yangi qo'shilganlar:* {joins}\n\n*G'oliblar soni:* {winners}",
-            "ru": f"*Промо ID:* {promo_id}\n*Заголовок:* {title}\n*Тип:* Referral {mode.split('_')[1]}\n*Истекает:* {exp}\n*Нужно пригласить (только для рандом режима):* {inv}\n\n*Участники:* {par}\n*Новые подписчики:* {joins}\n\n*Количество победителей:* {winners}"
+            "en": f"*Promo ID:* {promo_id}\n*Title:* {title}\n*Type:* Referral {mode.split('_')[1]}\n*Expires(as GMT+1):* {exp}\n*Should invite (for random sub mode only):* {inv}\n\n*Participants:* {par}\n*New joins:* {joins}\n\n*Number of winners:* {winners}",
+            "uz": f"*Promo ID:* {promo_id}\n*Sarlavhasi:* {title}\n*Turi:* Referral {mode.split('_')[1]}\n*Tugash muddati(GMT+1 bo‘yicha):* {exp}\n*Taklif qilish kerak (faqat random rejim uchun):* {inv}\n\n*Ishtirokchilar:* {par}\n*Yangi qo'shilganlar:* {joins}\n\n*G'oliblar soni:* {winners}",
+            "ru": f"*Промо ID:* {promo_id}\n*Заголовок:* {title}\n*Тип:* Referral {mode.split('_')[1]}\n*Истекает(по GMT+1):* {exp}\n*Нужно пригласить (только для рандом режима):* {inv}\n\n*Участники:* {par}\n*Новые подписчики:* {joins}\n\n*Количество победителей:* {winners}"
         },
         "sub": {
-            "en": f"*Promo ID:* {promo_id}\n*Title:* {title}\n*Mode:* Subscription {mode.split('_')[1]}\n*Expires:* {exp}\n\n*Participants:* {par}\n\n*Number of winners:* {winners}",
-            "uz": f"*Promo ID:* {promo_id}\n*Sarlavhasi:* {title}\n*Turi:* Subscription {mode.split('_')[1]}\n*Tugash muddati:* {exp}\n\n*Ishtirokchilar:* {par}\n\n*G'oliblar soni:* {winners}",
-            "ru": f"*Промо ID:* {promo_id}\n*Заголовок:* {title}\n*Тип:* Subscription {mode.split('_')[1]}\n*Истекает:* {exp}\n\n*Участники:* {par}\n\n*Количество победителей:* {winners}"
+            "en": f"*Promo ID:* {promo_id}\n*Title:* {title}\n*Mode:* Subscription {mode.split('_')[1]}\n*Expires(as GMT+1):* {exp}\n\n*Participants:* {par}\n\n*Number of winners:* {winners}",
+            "uz": f"*Promo ID:* {promo_id}\n*Sarlavhasi:* {title}\n*Turi:* Subscription {mode.split('_')[1]}\n*Tugash muddati(GMT+1 bo‘yicha):* {exp}\n\n*Ishtirokchilar:* {par}\n\n*G'oliblar soni:* {winners}",
+            "ru": f"*Промо ID:* {promo_id}\n*Заголовок:* {title}\n*Тип:* Subscription {mode.split('_')[1]}\n*Истекает(по GMT+1):* {exp}\n\n*Участники:* {par}\n\n*Количество победителей:* {winners}"
         }
     }
     return info[mode.split('_')[0]][usrlang]
@@ -287,14 +287,14 @@ give_exp = {
 async def is_correct(usrlang, title, mode, exp, inv, winners):
     info = {
         "ref": {
-            "en": f"Check if everything is correct\n\n*Title:* {title}\n*Mode:* Referral {mode.split('_')[1]}\n*Expires:* {exp}\n*Should invite (for random submode only):* {inv}\n\n*Number of winners:* {winners}",
-            "uz": f"Hammasi to'g'ri ekanini tekshiring\n\n*Sarlavha:* {title}\n*Turi:* Referral {mode.split('_')[1]}\n*Tugash muddati:* {exp}\n*Taklif qilish kerak (faqat tasodifiy rejim uchun):* {inv}\n\n*G'oliblar soni:* {winners}",
-            "ru": f"Проверьте, все ли правильно\n\n*Заголовок:* {title}\n*Тип:* Referral {mode.split('_')[1]}\n*Истекает:* {exp}\n*Нужно пригласить (только для рандом режима):* {inv}\n\n*Количество победителей:* {winners}"
+            "en": f"Check if everything is correct\n\n*Title:* {title}\n*Mode:* Referral {mode.split('_')[1]}\n*Expires(as GMT+1):* {exp}\n*Should invite (for random submode only):* {inv}\n\n*Number of winners:* {winners}",
+            "uz": f"Hammasi to'g'ri ekanini tekshiring\n\n*Sarlavha:* {title}\n*Turi:* Referral {mode.split('_')[1]}\n*Tugash muddati(GTM+1 bo‘yicha):* {exp}\n*Taklif qilish kerak (faqat tasodifiy rejim uchun):* {inv}\n\n*G'oliblar soni:* {winners}",
+            "ru": f"Проверьте, все ли правильно\n\n*Заголовок:* {title}\n*Тип:* Referral {mode.split('_')[1]}\n*Истекает(по GMT+1):* {exp}\n*Нужно пригласить (только для рандом режима):* {inv}\n\n*Количество победителей:* {winners}"
         },
         "sub": {
-            "en": f"Check if everything is correct\n\n*Title:* {title}\n*Mode:* Subscription {mode.split('_')[1]}\n*Expires:* {exp}\n\n*Number of winners:* {winners}",
-            "uz": f"Hammasi to'g'ri ekanini tekshiring\n\n*Sarlavha:* {title}\n*Turi:* Subscription {mode.split('_')[1]}\n*Tugash muddati:* {exp}\n\n*G'oliblar soni:* {winners}",
-            "ru": f"Проверьте, все ли правильно\n\n*Заголовок:* {title}\n*Тип:* Subscription {mode.split('_')[1]}\n*Истекает:* {exp}\n\n*Количество победителей:* {winners}"
+            "en": f"Check if everything is correct\n\n*Title:* {title}\n*Mode:* Subscription {mode.split('_')[1]}\n*Expires(as GTM+1):* {exp}\n\n*Number of winners:* {winners}",
+            "uz": f"Hammasi to'g'ri ekanini tekshiring\n\n*Sarlavha:* {title}\n*Turi:* Subscription {mode.split('_')[1]}\n*Tugash muddati(GMT+1 bo‘yicha):* {exp}\n\n*G'oliblar soni:* {winners}",
+            "ru": f"Проверьте, все ли правильно\n\n*Заголовок:* {title}\n*Тип:* Subscription {mode.split('_')[1]}\n*Истекает(по GMT+1):* {exp}\n\n*Количество победителей:* {winners}"
         }
     }
     return info[mode.split('_')[0]][usrlang]
