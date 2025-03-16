@@ -126,7 +126,7 @@ async def run_periodic_tasks():
 
 async def main() -> None:
     asyncio.create_task(run_periodic_tasks())
-
+    from handlers.middlwares import GroupMiddleware
     dp.include_routers(
         add_channels.router,
         create_promo.router,
@@ -136,6 +136,8 @@ async def main() -> None:
         defaultresp.router,
     )
     upd.include_routers(my_activity.router)
+    dp.message.outer_middleware(GroupMiddleware())
+    upd.message.outer_middleware(GroupMiddleware())
     await bot.delete_webhook(drop_pending_updates=True)
     await ubot.delete_webhook(drop_pending_updates=True)
     await asyncio.gather(

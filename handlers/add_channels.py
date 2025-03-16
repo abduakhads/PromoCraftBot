@@ -18,7 +18,7 @@ async def my_channels_show(message: types.Message):
         txt = lang.on_channels[dbrequests.userslang[message.from_user.id]]
         for row in res:
             txt += f"<a href='{row[2]}'>{row[1]}</a>\n"
-        await message.answer(txt, parse_mode="html")
+        await message.answer(txt, parse_mode="html", link_preview_options=types.LinkPreviewOptions(is_disabled=True))
         return
     await message.answer(
             lang.no_channels[dbrequests.userslang[message.from_user.id]]
@@ -30,7 +30,8 @@ async def added_channel(update: types.ChatMemberUpdated, bot: Bot):
     await asyncio.sleep(1)
     try:
         link = f"t.me/{update.chat.username}" if (update.chat.username) else (await bot.get_chat(update.chat.id)).invite_link 
-        if update.new_chat_member.can_post_messages and update.new_chat_member.can_invite_users:
+        gr_flag = update.chat.type in ["supergroup", "group"] or update.new_chat_member.can_post_messages
+        if type(update.new_chat_member) == types.ChatMemberAdministrator and gr_flag and update.new_chat_member.can_invite_users:
             await bot.send_message(
                 update.from_user.id, 
                 lang.added_channel[dbrequests.userslang[update.from_user.id]] + f"<a href='{link}'>{update.chat.title}</a>",parse_mode="html"
@@ -51,11 +52,13 @@ async def added_channel(update: types.ChatMemberUpdated, bot: Bot):
 async def kicked_channel(update: types.ChatMemberUpdated, bot: Bot):
     await asyncio.sleep(1)
     try:
-        await bot.send_message(
-            int(dbrequests.get_usrby_channel_db(update.chat.id)[0]), #error: list index out of range(when bot kicked and data no)
-            await lang.kicked_from_ch(dbrequests.userslang[update.from_user.id], update.chat.title, dbrequests.get_channel_link_db(update.chat.id)[0][0]),
-            parse_mode="Markdown"
-        )
+        if user := dbrequests.get_usrby_channel_db(update.chat.id):
+            user_id = int(user[0])
+            await bot.send_message(
+                user_id, #error: FIXED? list index out of range(when bot kicked and data no)
+                await lang.kicked_from_ch(dbrequests.userslang[update.from_user.id], update.chat.title, dbrequests.get_channel_link_db(update.chat.id)[0][0]),
+                parse_mode="Markdown"
+            )
     except Exception as e:
         print("Error on add_channels.kicked_channel:", e)
     dbrequests.remove_channel_db(update.chat.id)

@@ -157,9 +157,9 @@ async def edited_ch_from(usrlang: str, title: str, link: str):
 
 async def kicked_from_ch(usrlang: str, title: str, link: str):
     txt = {
-        "en": f"Bot was kicked from [{title}]({link}),\nyour promos related to channel are deleted",
-        "uz": f"Bot [{title}]({link}) kanaldan chiqarib yuborildi, kanalning barcha promolari o'chirib yuborildi",
-        "ru": f"Бот был выкинут из [{title}]({link}),\nваши промо, связанные с каналом, удалены"
+        "en": f"Bot was kicked from [{title}]({link}),\nyour active promos related to channel are deleted",
+        "uz": f"Bot [{title}]({link}) kanaldan chiqarib yuborildi, kanalning barcha aktiv promolari o'chirib yuborildi",
+        "ru": f"Бот был выкинут из [{title}]({link}),\nваши активные промо, связанные с каналом, удалены"
     }
     return txt[usrlang]
 
@@ -173,7 +173,7 @@ promo_canceled = {
 
 ref_joined = {
     "en": "joined channel via your",
-    "uz": "sizning quyidagi havolangiz orqali kanalga qo'shildi",
+    "uz": "sizning quyidagi havolangiz orqali kanalga qo'shildi:",
     "ru": "присоединился в канал по вашей следующей ссылке"
 }
 

@@ -28,3 +28,15 @@ class CancellForAll(BaseMiddleware):
         else:
             return await handler(event, data)
             # return await super().__call__(handler, event, data)
+
+
+class GroupMiddleware(BaseMiddleware):
+    async def __call__(
+            self, 
+            handler: Callable[[Message, Dict[str, Any]], Awaitable], 
+            event: Message | Update,
+            data: Dict[str, Any]
+        ) -> Any:
+        if event.chat.type in ['group', 'supergroup']:
+            return
+        return await handler(event, data)
