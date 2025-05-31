@@ -47,7 +47,11 @@ async def ustartcmd(message: types.Message, command: CommandObject, state: FSMCo
     elif command.args and command.args.split("_")[0] == "check":
         if text := dbrequests.check_winners(command.args.split("_")[1]):
             if text[0]:
-                await ubot.copy_message(message.chat.id, cfg.WINNER_LOG_CHANNEL, text[0])
+                try:
+                    await ubot.copy_message(message.chat.id, cfg.WINNER_LOG_CHANNEL, text[0])
+                except Exception as e:
+                    print(f"Error copying message: {e}")
+                    await ubot.send_message(message.chat.id, "Not found")
                 return
     if not message.from_user.id in dbrequests.userslang:
         usr = [message.from_user.id, "en",

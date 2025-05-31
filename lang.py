@@ -439,7 +439,7 @@ sup_type = {
 
 cancel_promo_inkb = {
     "en": "❌ Cancel promo",
-    "uz": "❌ Promo bekor qilish",
+    "uz": "❌ Promo-ni bekor qilish",
     "ru": "❌ Отменить промо"
 }
 
