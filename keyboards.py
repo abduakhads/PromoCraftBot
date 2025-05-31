@@ -146,3 +146,24 @@ async def read_docs_inkb(usrlang: str) -> InlineKeyboardMarkup:
         ]
     )
     return inkb
+
+
+async def promos_inkb(usrlang: str, promoid: str, text:str, cpy: str) -> InlineKeyboardMarkup:
+    inkb = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text=text, copy_text=CopyTextButton(text=cpy))],
+            [InlineKeyboardButton(text=lang.cancel_promo_inkb[usrlang], callback_data=f"cancel_promo_{promoid}")],
+            [InlineKeyboardButton(text=lang.finish_promo_inkb[usrlang], callback_data=f"finish_promo_{promoid}")],
+        ]
+    )
+    return inkb
+
+
+async def confirm_inkb(usrlang: str, promoid: str|int, type: str) -> InlineKeyboardMarkup:
+    inkb = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text=lang.confirm[usrlang].split("_")[0], callback_data=f"confirm_promo_{type}_{promoid}")],
+            [InlineKeyboardButton(text=lang.confirm[usrlang].split("_")[1], callback_data=f"forpromo_{promoid}")],
+        ]
+    )
+    return inkb

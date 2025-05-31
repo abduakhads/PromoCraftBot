@@ -1,5 +1,6 @@
 import sqlite3
 import functools
+from datetime import datetime
 from database import tables
 
 con = sqlite3.connect("database/data.db")
@@ -368,3 +369,55 @@ def put_postid_db(promo_id: int, msg_id: int):
         "UPDATE promos SET winners = ? WHERE promo_id = ?",
         ((msg_id * (-1)), promo_id)
     )
+
+
+@transaction
+def cancel_promo_db(promo_id: int):
+    uids = []
+    cur.execute(
+        "UPDATE promos SET status = -1 WHERE promo_id = ? RETURNING channel_id", (promo_id, )
+    )
+    channel_id = cur.fetchone()[0]
+    cur.execute(
+        "SELECT name FROM channels WHERE channel_id = ?", (channel_id,)
+    )
+    channel_name = cur.fetchone()[0]
+
+    cur.execute(
+        f"DELETE FROM subs WHERE promo_id = ? RETURNING user_id",
+        (promo_id, )
+    )
+    if res := cur.fetchall():
+        uids += [x[0] for x in res]
+    
+    cur.execute(
+        f"DELETE FROM reflinks WHERE promo_id = ? RETURNING user_id, reflink_id, link",
+        (promo_id, )
+    )
+    links_to_revoke = []
+    if res := cur.fetchall():
+        links_to_revoke += [x[2] for x in res]  # get links
+        uids += [x[0] for x in res]
+        cur.execute(
+            f"DELETE FROM joins WHERE reflink_id IN ({', '.join(['?'] * len(res))})",
+            tuple(x[1] for x in res)
+        )
+    return uids, links_to_revoke, channel_id, channel_name
+
+
+@transaction
+def finish_promo_db(promo_id: int):
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    cur.execute(
+        "UPDATE promos SET expiration = ? WHERE promo_id = ?",
+        (now, promo_id)
+    )
+
+
+def is_promo_active(promo_id: int) -> bool:
+    cur.execute(
+        "SELECT status FROM promos WHERE promo_id = ?",
+        (promo_id,)
+    )
+    res = cur.fetchone()
+    return res is not None and res[0] == 1

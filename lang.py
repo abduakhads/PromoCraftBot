@@ -435,3 +435,30 @@ sup_type = {
     "uz": "Bot faqat kanal va super guruhlarni qo‘llab quvvatlaydi",
     "ru": "Бот поддерживает только каналы и супер группы"
 }
+
+
+cancel_promo_inkb = {
+    "en": "❌ Cancel promo",
+    "uz": "❌ Promo bekor qilish",
+    "ru": "❌ Отменить промо"
+}
+
+
+finish_promo_inkb = {
+    "en": "🏁 Finish promo",
+    "uz": "🏁 Promo-ni tugatish",
+    "ru": "🏁 Завершить промо"
+}
+
+
+promo_finished = {
+    "en": "☑️ Promo was finished",
+    "uz": "☑️ Promo tugatildi",
+    "ru": "☑️ Промо было завершено"
+}
+
+confirm = {
+    "en": "✔️ Yes_✖️ No",
+    "uz": "✔️ Ha_✖️ Yo'q",
+    "ru": "✔️ Да_✖️ Нет"
+}
