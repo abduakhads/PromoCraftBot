@@ -25,4 +25,4 @@ If you are interested in the project, feel free to:
 (You might wanna check out the **Issues** tab for this.)
 
 
-P.s. by the way this was one if my first python projects after learning the language so hope you don't judge hard :)
+P.s. by the way this was one of my first python projects after learning the language so hope you don't judge hard :)
