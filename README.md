@@ -18,7 +18,8 @@ But probably not gonna do it as I keep delaying :D
 
 If you are interested in the project, feel free to:
 
-- Contribute  
+- Contribute
+  or
 - Fork and update further  
 
 (You might wanna check out the **Issues** tab for this.)
